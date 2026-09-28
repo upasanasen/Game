@@ -33,6 +33,17 @@ The first item of every shift is a training round: the right bin is lit and a wr
 
 Rules differ between towns inside most countries. Items marked **varies locally** accept more than one bin. Always check your own municipality.
 
+## Did you know?
+
+A few of the facts behind the game's items and design:
+
+- A milk carton is roughly **70% paperboard, 25% plastic and 5% aluminium**, which is why different countries sort it differently: as paper, as plastic, or as its own "cartons" stream.
+- **Window glass and drinking glass are not the same material as bottle glass.** They melt at a different temperature, so one broken pane or glass in a bottle-glass furnace can ruin the whole batch. That's why almost no country's game bin accepts them.
+- **84% of UK households put at least one wrong item in their recycling**, and the most common mistake is a drinking glass. The main cause is uncertainty, not carelessness — which is exactly what a game like this can help fix ([WRAP](https://www.wrap.ngo/media-centre/press-releases/84-uk-households-are-unintentionally-contaminating-their-recycling-bins)).
+- Glass can be recycled **indefinitely** without losing quality, but it's heavy to transport. Aluminium can also be recycled endlessly, and recycling it uses a small fraction of the energy needed to make new aluminium from ore.
+- A study of the same "pick a bin" idea used here found that players' sorting accuracy rose from **69% to 84%** after one replay, and the gain still held a week later ([UBC](https://psych.ubc.ca/news/online-game-trains-players-how-to-sort-waste-correctly/)).
+- India's four-stream system (Wet, Dry, Sanitary, Special care) only became mandatory nationwide on **1 April 2026** — it's genuinely new, even to people living there.
+
 ## Design choices
 
 - **Accuracy first.** Each country's answers were researched separately with official sources, listed in the `sources` field of each file in `data/regions/`.
@@ -41,7 +52,7 @@ Rules differ between towns inside most countries. Items marked **varies locally*
 - **Accessible bins.** Every bin has a colour, a pattern, an icon and a name, so nothing depends on colour alone. Keyboard play works, and the game respects "reduce motion".
 - **No dark patterns.** No lives, no punishing streaks, no global leaderboards.
 
-The research behind these choices is in [docs/research/Building a great sorting game.md](docs/research/Building%20a%20great%20sorting%20game.md).
+The research behind these choices is in [docs/research/Building a great sorting game.md](docs/research/Building%20a%20great%20sorting%20game.md). The reasoning behind individual decisions, kept up to date as the project grows, is in [DECISIONS.md](DECISIONS.md).
 
 ## Project layout
 
@@ -50,6 +61,7 @@ index.html            The whole game: one file, no build step needed to play
 data/regions/*.json   Bins, answers and reasons for each country
 tools/build_regions.py  Copies the country files into index.html
 docs/research/        Design research report
+DECISIONS.md          Log of design decisions and why they were made
 legacy/game.py        The original 2020 terminal quiz (Python 2)
 ```
 
