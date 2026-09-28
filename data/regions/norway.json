@@ -1,0 +1,276 @@
+{
+ "name": "Norway",
+ "sub": "National sorting rules (avfallsforskriften ch. 10a) with shared Sortere.no symbols: food, plastic, paper, glass/metal and residual at home, plus recycling station and pharmacy.",
+ "bins": [
+  {
+   "id": "food",
+   "label": "Food waste (matavfall)",
+   "sub": "Scraps, bones, grounds, shells",
+   "colour": "#3C8A50",
+   "divert": true
+  },
+  {
+   "id": "plastic",
+   "label": "Plastic packaging (plastemballasje)",
+   "sub": "Bottles, bags, tubes, film",
+   "colour": "#7B3F98",
+   "divert": true
+  },
+  {
+   "id": "paper",
+   "label": "Paper, cardboard & cartons",
+   "sub": "Paper, boxes, drink cartons",
+   "colour": "#2A6EBB",
+   "divert": true
+  },
+  {
+   "id": "glassmetal",
+   "label": "Glass & metal packaging",
+   "sub": "Jars, bottles, tins, cans",
+   "colour": "#1F8483",
+   "divert": true
+  },
+  {
+   "id": "rest",
+   "label": "Residual waste (restavfall)",
+   "sub": "Burned for energy",
+   "colour": "#454C55",
+   "divert": false
+  },
+  {
+   "id": "station",
+   "label": "Recycling station (gjenvinningsstasjon)",
+   "sub": "Hazardous, electrical, bulky, flat glass",
+   "colour": "#B2413A",
+   "divert": true
+  },
+  {
+   "id": "pharmacy",
+   "label": "Pharmacy (apotek)",
+   "sub": "Leftover and expired medicines",
+   "colour": "#2E9E6A",
+   "divert": true
+  }
+ ],
+ "items": {
+  "banana": {
+   "a": [
+    "food"
+   ],
+   "w": "Food scraps become biogas and fertiliser; separate food collection is required nationwide.",
+   "v": false
+  },
+  "eggshell": {
+   "a": [
+    "food"
+   ],
+   "w": "Egg shells are food waste and go with other kitchen scraps.",
+   "v": false
+  },
+  "coffee": {
+   "a": [
+    "food"
+   ],
+   "w": "Coffee grounds and paper filters both go in food waste.",
+   "v": false
+  },
+  "bones": {
+   "a": [
+    "food"
+   ],
+   "w": "Bones are accepted in Norwegian food waste along with meat and fish scraps.",
+   "v": false
+  },
+  "shampoo": {
+   "a": [
+    "plastic"
+   ],
+   "w": "Empty plastic bottles are plastic packaging; a quick squeeze-out is enough, no need to scrub.",
+   "v": false
+  },
+  "polybag": {
+   "a": [
+    "plastic"
+   ],
+   "w": "Carrier bags and soft plastic film count as plastic packaging.",
+   "v": false
+  },
+  "chips": {
+   "a": [
+    "plastic",
+    "rest"
+   ],
+   "w": "Plastic crisp bags go with plastic packaging; bags mixing paper and plastic go in residual waste.",
+   "v": true
+  },
+  "tube": {
+   "a": [
+    "plastic"
+   ],
+   "w": "Squeeze it empty and sort the tube as plastic packaging.",
+   "v": false
+  },
+  "carton": {
+   "a": [
+    "paper"
+   ],
+   "w": "In Norway drink cartons are sorted with paper and cardboard, not with plastic.",
+   "v": false
+  },
+  "eggtray": {
+   "a": [
+    "paper",
+    "food"
+   ],
+   "w": "Sortere.no says paper; some municipalities suggest food waste, where it soaks up moisture.",
+   "v": true
+  },
+  "box": {
+   "a": [
+    "paper",
+    "station"
+   ],
+   "w": "Flatten boxes for the paper bin; take large amounts to the recycling station.",
+   "v": false
+  },
+  "pizza": {
+   "a": [
+    "paper",
+    "rest"
+   ],
+   "w": "Scrape off leftovers; grease stains are fine in paper. Boxes caked in food go in residual.",
+   "v": false
+  },
+  "newspaper": {
+   "a": [
+    "paper"
+   ],
+   "w": "Newspapers are recycled into new paper.",
+   "v": false
+  },
+  "jar": {
+   "a": [
+    "glassmetal"
+   ],
+   "w": "Empty glass jars go in glass and metal packaging; the metal lid can go too.",
+   "v": false
+  },
+  "wine": {
+   "a": [
+    "glassmetal"
+   ],
+   "w": "Wine bottles carry no pant deposit, so they go in glass and metal packaging.",
+   "v": false
+  },
+  "perfume": {
+   "a": [
+    "glassmetal"
+   ],
+   "w": "A glass perfume bottle is packaging, so it goes with glass and metal.",
+   "v": false
+  },
+  "tin": {
+   "a": [
+    "glassmetal"
+   ],
+   "w": "Empty food tins are metal packaging and are recycled with glass.",
+   "v": false
+  },
+  "window": {
+   "a": [
+    "station"
+   ],
+   "w": "Window glass is not packaging, and insulated panes can be hazardous; take it to the recycling station.",
+   "v": false
+  },
+  "drinkglass": {
+   "a": [
+    "rest",
+    "station"
+   ],
+   "w": "Drinking glass has a different make-up from jars; wrap it and put it in residual waste.",
+   "v": false
+  },
+  "mirror": {
+   "a": [
+    "rest",
+    "station"
+   ],
+   "w": "Mirrors are not glass packaging; wrap small pieces for residual, take big ones to the station.",
+   "v": false
+  },
+  "tissue": {
+   "a": [
+    "rest",
+    "food"
+   ],
+   "w": "Used tissues go in residual; paper that wiped up food spills may go in food waste.",
+   "v": true
+  },
+  "diaper": {
+   "a": [
+    "rest"
+   ],
+   "w": "Diapers mix plastic, pulp and waste, so they are burned for energy.",
+   "v": false
+  },
+  "pad": {
+   "a": [
+    "rest"
+   ],
+   "w": "Sanitary products go in residual waste.",
+   "v": false
+  },
+  "battery": {
+   "a": [
+    "station"
+   ],
+   "w": "Batteries are hazardous; return them to shops that sell batteries or to the recycling station.",
+   "v": false
+  },
+  "bulb": {
+   "a": [
+    "station"
+   ],
+   "w": "CFL bulbs contain mercury; hand them in where bulbs are sold or at the recycling station.",
+   "v": false
+  },
+  "meds": {
+   "a": [
+    "pharmacy"
+   ],
+   "w": "Pharmacies take back leftover medicines free of charge so they are destroyed safely.",
+   "v": false
+  },
+  "paint": {
+   "a": [
+    "station"
+   ],
+   "w": "Paint with leftovers is hazardous waste for the recycling station.",
+   "v": false
+  },
+  "toy": {
+   "a": [
+    "rest",
+    "station"
+   ],
+   "w": "A plastic toy is not packaging; small ones go in residual, big ones to the station.",
+   "v": true
+  }
+ },
+ "sources": [
+  "https://sortere.no/",
+  "https://sortere.no/produkttype/Eggekartong/93",
+  "https://sortere.no/produkttype/Pizzaeske/322",
+  "https://sortere.no/produkttype/Chipspose_og_snackspose/75",
+  "https://sortere.no/produkttype/Tannkremtube/455",
+  "https://sortere.no/produkttype/T%C3%B8rkepapir/488",
+  "https://sortere.no/produkttype/Glass_(ikke_emballasje)/119",
+  "https://sortere.no/produkttype/Vin-_og_drikkeglass/85",
+  "https://sortere.no/avfallstype/Drikkekartong/26",
+  "https://sortere.no/avfallstype/Farlig%20avfall/37",
+  "https://www.grontpunkt.no/",
+  "https://www.miljodirektoratet.no/ansvarsomrader/avfall/for-myndigheter/utsortering-og-materialgjenvinning-av-avfall/avfallstyper-og-krav-til-utsortering/",
+  "https://www.ullensaker.kommune.no/aktuelt/nye-krav-til-sortering-av-avfall-i-2025/"
+ ]
+}

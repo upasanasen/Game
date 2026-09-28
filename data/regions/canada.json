@@ -1,0 +1,249 @@
+{
+ "name": "Canada",
+ "sub": "Toronto-style curbside Blue Bin, Green Bin and Garbage, plus hazardous-waste depots and pharmacy take-back.",
+ "bins": [
+  {
+   "id": "blue",
+   "label": "Blue bin: recycling",
+   "sub": "Packaging, paper, cans, glass, bags",
+   "colour": "#1F5FA8",
+   "divert": true
+  },
+  {
+   "id": "green",
+   "label": "Green bin: organics",
+   "sub": "Food, soiled paper, diapers",
+   "colour": "#3C8A50",
+   "divert": true
+  },
+  {
+   "id": "garbage",
+   "label": "Garbage bin",
+   "sub": "Everything that cannot be recycled",
+   "colour": "#454C55",
+   "divert": false
+  },
+  {
+   "id": "depot",
+   "label": "Drop-off depot: hazardous",
+   "sub": "Batteries, bulbs, paint, chemicals",
+   "colour": "#B2413A",
+   "divert": true
+  },
+  {
+   "id": "pharmacy",
+   "label": "Pharmacy take-back",
+   "sub": "Old medicines and sharps",
+   "colour": "#7A4FA0",
+   "divert": true
+  }
+ ],
+ "items": {
+  "banana": {
+   "a": [
+    "green"
+   ],
+   "w": "Food scraps go in the Green Bin, where they are turned into compost and biogas.",
+   "v": false
+  },
+  "eggshell": {
+   "a": [
+    "green"
+   ],
+   "w": "Egg shells are accepted in the Green Bin with other food scraps.",
+   "v": false
+  },
+  "coffee": {
+   "a": [
+    "green"
+   ],
+   "w": "Coffee grounds and paper filters both go in the Green Bin.",
+   "v": false
+  },
+  "bones": {
+   "a": [
+    "green"
+   ],
+   "w": "Toronto's Green Bin takes meat, fish and poultry, bones included; they are processed industrially, not in a backyard composter.",
+   "v": false
+  },
+  "shampoo": {
+   "a": [
+    "blue"
+   ],
+   "w": "Empty plastic bottles go in the Blue Bin; put the cap back on.",
+   "v": false
+  },
+  "polybag": {
+   "a": [
+    "blue"
+   ],
+   "w": "Since 2026 Ontario's Blue Bin takes plastic bags; stuff them all into one bag. Many other provinces only take them at depots or stores.",
+   "v": true
+  },
+  "chips": {
+   "a": [
+    "blue"
+   ],
+   "w": "Ontario's 2026 Blue Bin accepts chip bags and snack wrappers; elsewhere in Canada they often still go in the garbage.",
+   "v": true
+  },
+  "tube": {
+   "a": [
+    "blue"
+   ],
+   "w": "Toothpaste tubes became Blue Bin items in Ontario in 2026; many other provinces still say garbage.",
+   "v": true
+  },
+  "carton": {
+   "a": [
+    "blue"
+   ],
+   "w": "Milk and juice cartons are recycled in the Blue Bin across Canada.",
+   "v": false
+  },
+  "eggtray": {
+   "a": [
+    "blue"
+   ],
+   "w": "Paper egg cartons go in the Blue Bin with boxboard; some cities put them in organics instead.",
+   "v": true
+  },
+  "box": {
+   "a": [
+    "blue"
+   ],
+   "w": "Flatten cardboard boxes and put them in the Blue Bin.",
+   "v": false
+  },
+  "pizza": {
+   "a": [
+    "green",
+    "blue"
+   ],
+   "w": "Greasy or food-soiled pizza boxes go in the Green Bin; a clean, empty box can go in the Blue Bin.",
+   "v": true
+  },
+  "newspaper": {
+   "a": [
+    "blue"
+   ],
+   "w": "Newspapers and flyers go in the Blue Bin.",
+   "v": false
+  },
+  "jar": {
+   "a": [
+    "blue"
+   ],
+   "w": "Empty glass jars go in the Blue Bin; take the lid off.",
+   "v": false
+  },
+  "wine": {
+   "a": [
+    "blue"
+   ],
+   "w": "The Blue Bin takes wine bottles, but most provinces pay a deposit refund if you return them to a store or depot.",
+   "v": true
+  },
+  "perfume": {
+   "a": [
+    "blue"
+   ],
+   "w": "Empty glass perfume bottles count as cosmetic containers in Ontario's Blue Bin; some cities say garbage.",
+   "v": true
+  },
+  "tin": {
+   "a": [
+    "blue"
+   ],
+   "w": "Rinsed food cans go in the Blue Bin.",
+   "v": false
+  },
+  "window": {
+   "a": [
+    "garbage"
+   ],
+   "w": "Window glass melts differently from bottle glass, so wrap it safely and put it in the garbage.",
+   "v": false
+  },
+  "drinkglass": {
+   "a": [
+    "garbage"
+   ],
+   "w": "Drinking glasses and dishes are not accepted for recycling; wrap broken pieces and put them in the garbage.",
+   "v": false
+  },
+  "mirror": {
+   "a": [
+    "garbage"
+   ],
+   "w": "Mirrors are coated and cannot be recycled; wrap broken pieces and put them in the garbage.",
+   "v": false
+  },
+  "tissue": {
+   "a": [
+    "green"
+   ],
+   "w": "Toronto takes used tissues in the Green Bin; many other cities send them to garbage.",
+   "v": true
+  },
+  "diaper": {
+   "a": [
+    "green"
+   ],
+   "w": "Toronto's Green Bin accepts diapers; most other Canadian cities want them in the garbage.",
+   "v": true
+  },
+  "pad": {
+   "a": [
+    "green"
+   ],
+   "w": "Toronto's Green Bin accepts pads and tampons; most other cities want them in the garbage.",
+   "v": true
+  },
+  "battery": {
+   "a": [
+    "depot"
+   ],
+   "w": "Batteries can start fires in trucks; take them to a depot or a store battery collection box.",
+   "v": false
+  },
+  "bulb": {
+   "a": [
+    "depot"
+   ],
+   "w": "CFLs contain a little mercury, so take them to a hazardous waste depot or a retailer take-back.",
+   "v": false
+  },
+  "meds": {
+   "a": [
+    "pharmacy"
+   ],
+   "w": "Return expired medicines to any pharmacy for free, safe disposal.",
+   "v": false
+  },
+  "paint": {
+   "a": [
+    "depot"
+   ],
+   "w": "Leftover paint goes to a depot or a participating paint retailer, where it is recycled.",
+   "v": false
+  },
+  "toy": {
+   "a": [
+    "garbage"
+   ],
+   "w": "Broken plastic toys are not packaging, so they go in the garbage. Toys with batteries or electronics go to e-waste.",
+   "v": false
+  }
+ },
+ "sources": [
+  "https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-green-bin/",
+  "https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/changes-to-recycling-program/",
+  "https://www.toronto.ca/services-payments/recycling-organics-garbage/waste-wizard/",
+  "https://www.circularmaterials.ca/toronto/",
+  "https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/household-hazardous-waste/",
+  "https://healthsteward.ca/",
+  "https://www.cp24.com/local/toronto/2026/01/05/more-items-can-be-recycled-through-ontarios-blue-box-program/"
+ ]
+}

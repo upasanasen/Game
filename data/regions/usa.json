@@ -1,0 +1,270 @@
+{
+ "name": "USA",
+ "sub": "Typical single-stream curbside Recycling, Trash and (where offered) Compost, plus hazardous-waste drop-off, pharmacy take-back and store drop-off for plastic bags.",
+ "bins": [
+  {
+   "id": "recycling",
+   "label": "Recycling cart",
+   "sub": "Bottles, cans, paper, cardboard",
+   "colour": "#1F5FA8",
+   "divert": true
+  },
+  {
+   "id": "trash",
+   "label": "Trash cart",
+   "sub": "Non-recyclables, landfill",
+   "colour": "#454C55",
+   "divert": false
+  },
+  {
+   "id": "compost",
+   "label": "Compost cart (if offered)",
+   "sub": "Food scraps and yard waste",
+   "colour": "#3C8A50",
+   "divert": true
+  },
+  {
+   "id": "hhw",
+   "label": "Hazardous waste drop-off",
+   "sub": "Batteries, bulbs, paint, chemicals",
+   "colour": "#B2413A",
+   "divert": true
+  },
+  {
+   "id": "takeback",
+   "label": "Pharmacy drug take-back",
+   "sub": "Unused or expired medicines",
+   "colour": "#7A4FA0",
+   "divert": true
+  },
+  {
+   "id": "storebag",
+   "label": "Store drop-off: bags",
+   "sub": "Plastic bags and film",
+   "colour": "#B98A00",
+   "divert": true
+  }
+ ],
+ "items": {
+  "banana": {
+   "a": [
+    "compost",
+    "trash"
+   ],
+   "w": "Food scraps go in a compost cart where your city has one; otherwise they go in the trash.",
+   "v": true
+  },
+  "eggshell": {
+   "a": [
+    "compost",
+    "trash"
+   ],
+   "w": "Egg shells compost well; use the trash if your city has no compost collection.",
+   "v": true
+  },
+  "coffee": {
+   "a": [
+    "compost",
+    "trash"
+   ],
+   "w": "Coffee grounds and paper filters go in compost where it is offered, otherwise in the trash.",
+   "v": true
+  },
+  "bones": {
+   "a": [
+    "compost",
+    "trash"
+   ],
+   "w": "City compost programs usually take bones, but home compost piles don't; without a program, use the trash.",
+   "v": true
+  },
+  "shampoo": {
+   "a": [
+    "recycling"
+   ],
+   "w": "Empty plastic bottles are accepted in almost every curbside recycling program.",
+   "v": false
+  },
+  "polybag": {
+   "a": [
+    "storebag",
+    "trash"
+   ],
+   "w": "Plastic bags jam sorting machines, so keep them out of the recycling cart. Many grocery stores collect them.",
+   "v": true
+  },
+  "chips": {
+   "a": [
+    "trash"
+   ],
+   "w": "Chip bags are made of layered plastic and foil, which most programs cannot recycle.",
+   "v": false
+  },
+  "tube": {
+   "a": [
+    "trash"
+   ],
+   "w": "Most US programs don't accept toothpaste tubes yet, even the ones labelled recyclable.",
+   "v": true
+  },
+  "carton": {
+   "a": [
+    "recycling"
+   ],
+   "w": "Most US households can recycle milk cartons at the curb, but some programs still don't take them.",
+   "v": true
+  },
+  "eggtray": {
+   "a": [
+    "recycling",
+    "compost"
+   ],
+   "w": "Paper egg cartons are usually recycled with paper, or composted where a compost program takes them.",
+   "v": true
+  },
+  "box": {
+   "a": [
+    "recycling"
+   ],
+   "w": "Flatten cardboard boxes and put them in the recycling cart.",
+   "v": false
+  },
+  "pizza": {
+   "a": [
+    "recycling",
+    "compost",
+    "trash"
+   ],
+   "w": "Scrape out the food and recycle the box. Put heavily soiled parts in compost or the trash.",
+   "v": true
+  },
+  "newspaper": {
+   "a": [
+    "recycling"
+   ],
+   "w": "Newspapers are one of the easiest things to recycle.",
+   "v": false
+  },
+  "jar": {
+   "a": [
+    "recycling"
+   ],
+   "w": "Glass jars are recycled in most programs, but some cities want glass taken to a separate drop-off.",
+   "v": true
+  },
+  "wine": {
+   "a": [
+    "recycling"
+   ],
+   "w": "Wine bottles go in recycling; a few cities require glass drop-off, and some states refund a deposit.",
+   "v": true
+  },
+  "perfume": {
+   "a": [
+    "trash"
+   ],
+   "w": "Most programs take only food and drink glass, and the spray pump can't be removed.",
+   "v": true
+  },
+  "tin": {
+   "a": [
+    "recycling"
+   ],
+   "w": "Rinse food cans and put them in the recycling cart.",
+   "v": false
+  },
+  "window": {
+   "a": [
+    "trash"
+   ],
+   "w": "Broken glass can injure sorting workers, and window glass melts differently. Wrap it and put it in the trash.",
+   "v": false
+  },
+  "drinkglass": {
+   "a": [
+    "trash"
+   ],
+   "w": "Drinking glass differs from bottle glass, and broken pieces are a hazard. Wrap them and put them in the trash.",
+   "v": false
+  },
+  "mirror": {
+   "a": [
+    "trash"
+   ],
+   "w": "Mirrors have a coating and can't be recycled; wrap broken pieces and put them in the trash.",
+   "v": false
+  },
+  "tissue": {
+   "a": [
+    "trash",
+    "compost"
+   ],
+   "w": "Used tissues go in the trash; some city compost programs accept them.",
+   "v": true
+  },
+  "diaper": {
+   "a": [
+    "trash"
+   ],
+   "w": "Disposable diapers go in the trash; they are not recyclable or compostable at the curb.",
+   "v": false
+  },
+  "pad": {
+   "a": [
+    "trash"
+   ],
+   "w": "Wrap sanitary pads and put them in the trash; don't flush them.",
+   "v": false
+  },
+  "battery": {
+   "a": [
+    "hhw",
+    "trash"
+   ],
+   "w": "Most places allow alkaline AAs in the trash, but EPA recommends recycling them at a drop-off. Never put them in recycling.",
+   "v": true
+  },
+  "bulb": {
+   "a": [
+    "hhw"
+   ],
+   "w": "CFLs contain mercury, so take them to a hazardous waste drop-off or a hardware store take-back.",
+   "v": true
+  },
+  "meds": {
+   "a": [
+    "takeback",
+    "trash"
+   ],
+   "w": "Use a pharmacy drop box. With no take-back nearby, FDA says seal pills in a bag with coffee grounds and trash them.",
+   "v": false
+  },
+  "paint": {
+   "a": [
+    "hhw",
+    "trash"
+   ],
+   "w": "Take oil-based and leftover paint to a drop-off; in many places dried-out latex paint can go in the trash.",
+   "v": true
+  },
+  "toy": {
+   "a": [
+    "trash"
+   ],
+   "w": "Broken plastic toys aren't accepted in curbside recycling, so they go in the trash.",
+   "v": false
+  }
+ },
+ "sources": [
+  "https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
+  "https://www.epa.gov/recycle/frequent-questions-recycling",
+  "https://www.epa.gov/recycle/used-household-batteries",
+  "https://www.epa.gov/mercury/recycling-and-disposal-cfls-and-other-bulbs-contain-mercury",
+  "https://www.epa.gov/hw/household-hazardous-waste-hhw",
+  "https://www.epa.gov/household-medication-disposal",
+  "https://www.fda.gov/drugs/safe-disposal-medicines/disposal-unused-medicines-what-you-should-know",
+  "https://www.dea.gov/takebackday",
+  "https://www.recyclecartons.com/",
+  "https://how2recycle.info/sdo"
+ ]
+}

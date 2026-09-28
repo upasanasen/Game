@@ -1,0 +1,281 @@
+{
+ "name": "Italy",
+ "sub": "Municipal raccolta differenziata following CONAI consortium guidance (Comieco, Corepla, CoReVe), typically door-to-door with plastica e metalli collected together.",
+ "bins": [
+  {
+   "id": "organico",
+   "label": "Brown bin (organico / umido)",
+   "sub": "Food scraps and soiled paper",
+   "colour": "#7B4A2D",
+   "divert": true
+  },
+  {
+   "id": "carta",
+   "label": "Blue bin (carta e cartone)",
+   "sub": "Paper, cardboard and drink cartons",
+   "colour": "#1F5FBF",
+   "divert": true
+  },
+  {
+   "id": "plastica",
+   "label": "Yellow bin (plastica e metalli)",
+   "sub": "Plastic packaging, cans and tins",
+   "colour": "#F2C500",
+   "divert": true
+  },
+  {
+   "id": "vetro",
+   "label": "Green bell (vetro)",
+   "sub": "Glass bottles and jars",
+   "colour": "#2E8B57",
+   "divert": true
+  },
+  {
+   "id": "secco",
+   "label": "Grey bin (indifferenziato / secco residuo)",
+   "sub": "Non-recyclable leftovers",
+   "colour": "#5A5A5A",
+   "divert": false
+  },
+  {
+   "id": "pile",
+   "label": "Battery box (pile esauste)",
+   "sub": "Used household batteries",
+   "colour": "#C8102E",
+   "divert": true
+  },
+  {
+   "id": "farmaci",
+   "label": "Pharmacy bin (farmaci scaduti)",
+   "sub": "Expired medicines",
+   "colour": "#1FA34A",
+   "divert": true
+  },
+  {
+   "id": "centro",
+   "label": "Recycling centre (isola ecologica)",
+   "sub": "RAEE, paint, bulky and hazardous",
+   "colour": "#E07B00",
+   "divert": true
+  }
+ ],
+ "items": {
+  "banana": {
+   "a": [
+    "organico"
+   ],
+   "w": "Fruit peel is food waste and becomes compost or biogas via the umido bin.",
+   "v": false
+  },
+  "eggshell": {
+   "a": [
+    "organico"
+   ],
+   "w": "Egg shells are food waste and go in the umido with other kitchen scraps.",
+   "v": false
+  },
+  "coffee": {
+   "a": [
+    "organico"
+   ],
+   "w": "Coffee grounds go in the organico; plastic or aluminium capsules usually don't.",
+   "v": false
+  },
+  "bones": {
+   "a": [
+    "organico"
+   ],
+   "w": "Italian food-waste collections accept meat and fish bones along with other scraps.",
+   "v": false
+  },
+  "shampoo": {
+   "a": [
+    "plastica"
+   ],
+   "w": "Empty plastic bottles are packaging and go in the plastic and metal bin.",
+   "v": false
+  },
+  "polybag": {
+   "a": [
+    "organico",
+    "plastica"
+   ],
+   "w": "Thin shopping bags in Italy must be compostable, so they're reused as umido liners; a conventional plastic bag goes in plastica.",
+   "v": true
+  },
+  "chips": {
+   "a": [
+    "plastica"
+   ],
+   "w": "Corepla confirms crisp packets are plastic packaging even though they look metallic inside.",
+   "v": false
+  },
+  "tube": {
+   "a": [
+    "plastica"
+   ],
+   "w": "Corepla counts toothpaste tubes as plastic packaging, so squeeze it out and put it in plastica.",
+   "v": false
+  },
+  "carton": {
+   "a": [
+    "carta",
+    "plastica"
+   ],
+   "w": "Cities like Milan and Rome collect drink cartons with paper, but some towns want them with plastic; check locally.",
+   "v": true
+  },
+  "eggtray": {
+   "a": [
+    "carta"
+   ],
+   "w": "Moulded pulp egg trays are paper packaging and go in carta e cartone.",
+   "v": false
+  },
+  "box": {
+   "a": [
+    "carta"
+   ],
+   "w": "Flatten cardboard boxes and put them in the paper bin; large ones go to the recycling centre.",
+   "v": false
+  },
+  "pizza": {
+   "a": [
+    "carta",
+    "organico",
+    "secco"
+   ],
+   "w": "Comieco says emptied boxes with grease stains go in carta, but many towns ask for soaked parts to go in organico or secco.",
+   "v": true
+  },
+  "newspaper": {
+   "a": [
+    "carta"
+   ],
+   "w": "Newspapers and magazines are the classic carta e cartone material.",
+   "v": false
+  },
+  "jar": {
+   "a": [
+    "vetro"
+   ],
+   "w": "Glass jars go in the green glass bell; lids go in plastica e metalli.",
+   "v": false
+  },
+  "wine": {
+   "a": [
+    "vetro"
+   ],
+   "w": "Glass bottles go in the vetro bell and are melted into new bottles.",
+   "v": false
+  },
+  "perfume": {
+   "a": [
+    "vetro"
+   ],
+   "w": "A glass perfume bottle is packaging glass, so it goes in vetro, with the pump removed if possible.",
+   "v": false
+  },
+  "tin": {
+   "a": [
+    "plastica",
+    "vetro"
+   ],
+   "w": "Most cities collect tins with plastic, but some put metals in with glass.",
+   "v": true
+  },
+  "window": {
+   "a": [
+    "centro",
+    "secco"
+   ],
+   "w": "Window glass isn't packaging and melts differently, so take it to the isola ecologica or put small pieces in secco.",
+   "v": false
+  },
+  "drinkglass": {
+   "a": [
+    "secco"
+   ],
+   "w": "Drinking glasses and crystal have a different composition from bottle glass, so they go in the indifferenziato.",
+   "v": false
+  },
+  "mirror": {
+   "a": [
+    "secco",
+    "centro"
+   ],
+   "w": "Mirrors are coated flat glass, so they don't go in vetro; small pieces go in secco, large ones to the recycling centre.",
+   "v": false
+  },
+  "tissue": {
+   "a": [
+    "organico",
+    "secco"
+   ],
+   "w": "Most Italian cities accept used paper tissues in the umido because they're compostable; a few ask for secco.",
+   "v": true
+  },
+  "diaper": {
+   "a": [
+    "secco"
+   ],
+   "w": "Nappies can't be recycled with other materials and go in the residual bin, though some towns collect them separately.",
+   "v": false
+  },
+  "pad": {
+   "a": [
+    "secco"
+   ],
+   "w": "Sanitary products are hygiene waste for the indifferenziato bin.",
+   "v": false
+  },
+  "battery": {
+   "a": [
+    "pile",
+    "centro"
+   ],
+   "w": "Batteries go in the collection boxes found in shops and supermarkets, or at the isola ecologica.",
+   "v": false
+  },
+  "bulb": {
+   "a": [
+    "centro"
+   ],
+   "w": "Energy-saving bulbs are RAEE containing mercury; take them to the recycling centre or a shop that sells bulbs.",
+   "v": false
+  },
+  "meds": {
+   "a": [
+    "farmaci"
+   ],
+   "w": "Expired medicines go in the special bins outside pharmacies; the box and leaflet go in carta.",
+   "v": false
+  },
+  "paint": {
+   "a": [
+    "centro"
+   ],
+   "w": "Leftover paint is hazardous waste and must go to the isola ecologica.",
+   "v": false
+  },
+  "toy": {
+   "a": [
+    "secco",
+    "centro"
+   ],
+   "w": "Toys aren't packaging, so Corepla says they don't go in plastica; small ones go in secco, large ones to the recycling centre.",
+   "v": false
+  }
+ },
+ "sources": [
+  "https://www.conai.org/",
+  "https://www.comieco.org/dove-buttare-il-cartone-della-pizza/",
+  "https://www.comieco.org/carta-e-cartone/la-raccolta-differenziata/dove-lo-butto/",
+  "https://www.corepla.it/cosa-si-mette-nella-raccolta-differenziata/",
+  "https://www.coreve.it/",
+  "https://www.amsa.it/it/milano/servizi/raccolta-differenziata",
+  "https://www.amsa.it/it/media/comunicati-stampa/a2a-comieco-raccolta-differenziata-recupero-contenitori-milano",
+  "https://www.amaroma.it/raccolta-differenziata",
+  "https://www.cdcraee.it/"
+ ]
+}

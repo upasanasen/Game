@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Sorting Shift: a waste-sorting game with real recycling rules for ten countries.">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<title>Sorting Shift</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --ground:#E6EAE5; --surface:#F7F8F5; --surface-2:#EEF1EC; --ink:#1B231F; --muted:#56615B; --line:#C7CEC8;
+  --amber:#E3A400; --amber-ink:#2E2200; --belt:#2B3330; --belt-2:#3A4440;
+  --good:#23724A; --good-bg:#DDEFE3; --bad:#B03E0C; --bad-bg:#F8E3D8;
+  --tag:#F7F8F5; --tag-ink:#1B231F; --tag-muted:#56615B;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#111513; --surface:#1B211E; --surface-2:#222925; --ink:#E4EAE6; --muted:#9AA69F; --line:#323B36;
+    --amber:#F0B400; --belt:#0B0E0D; --belt-2:#1A201D;
+    --good:#5CC08A; --good-bg:#16301F; --bad:#F08655; --bad-bg:#3A1E12;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#111513; --surface:#1B211E; --surface-2:#222925; --ink:#E4EAE6; --muted:#9AA69F; --line:#323B36;
+  --amber:#F0B400; --belt:#0B0E0D; --belt-2:#1A201D;
+  --good:#5CC08A; --good-bg:#16301F; --bad:#F08655; --bad-bg:#3A1E12;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:20px 40px}
+.wrap{max-width:1000px;margin:0 auto;display:grid;gap:16px}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.defs{position:absolute;width:0;height:0;overflow:hidden}
+
+/* header */
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px}
+.brand{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.brand h1{font-family:var(--display);font-weight:900;font-size:clamp(32px,6vw,52px);line-height:.9;margin:0;letter-spacing:.01em;text-transform:uppercase}
+.brand h1 span{background:repeating-linear-gradient(-45deg,var(--amber) 0 10px,var(--amber-ink) 10px 20px);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tag{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tools{display:flex;gap:8px;align-items:center}
+.chip{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);background:var(--surface);border-radius:4px;padding:6px 10px}
+
+/* HUD */
+.hud{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.hud>div{background:var(--surface);padding:10px 14px;display:grid;gap:2px;align-content:start}
+.hud .k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.hud .v{font-family:var(--display);font-weight:700;font-size:28px;line-height:1;font-variant-numeric:tabular-nums}
+.ticks{display:flex;gap:3px;margin-top:4px}
+.ticks i{flex:1;height:6px;border-radius:1px;background:var(--line)}
+.ticks i.ok{background:var(--good)} .ticks i.no{background:var(--bad)} .ticks i.now{background:var(--amber)}
+
+/* stage */
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:16px;align-items:start}
+.floor{background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.belt{position:relative;height:210px;background:var(--belt);display:grid;place-items:center;overflow:hidden}
+.belt::before{content:"";position:absolute;inset:auto 0 0 0;height:26px;background:repeating-linear-gradient(90deg,var(--belt-2) 0 22px,var(--belt) 22px 44px);animation:roll 1.2s linear infinite}
+.belt::after{content:"";position:absolute;inset:0 0 auto 0;height:8px;background:repeating-linear-gradient(-45deg,var(--amber) 0 10px,var(--amber-ink) 10px 20px)}
+@keyframes roll{to{background-position:44px 0}}
+.cue{position:absolute;z-index:1;left:12px;top:16px;font-family:var(--display);font-weight:900;font-size:22px;color:var(--amber);text-transform:uppercase;letter-spacing:.04em}
+.how{position:absolute;z-index:1;right:12px;top:20px;font-family:var(--mono);font-size:11px;color:#9AA69F;letter-spacing:.05em;text-transform:uppercase}
+.parcel{position:relative;z-index:2;background:var(--tag);color:var(--tag-ink);border-radius:6px;padding:10px 20px 10px;width:210px;max-width:calc(100% - 32px);display:grid;justify-items:center;gap:0;box-shadow:0 10px 0 -4px rgba(0,0,0,.35);cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.parcel::before{content:"";position:absolute;top:8px;left:50%;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:var(--belt);box-shadow:inset 0 0 0 2px #9AA69F}
+.parcel.enter{animation:slidein .45s cubic-bezier(.2,.9,.3,1.2)}
+.parcel.dragging{cursor:grabbing;box-shadow:0 22px 24px -8px rgba(0,0,0,.45);z-index:30}
+@keyframes slidein{from{transform:translateX(-130%) rotate(-4deg)}to{transform:none}}
+.parcel .art{width:96px;height:96px;margin-top:8px}
+.parcel .nm{font-family:var(--display);font-weight:700;font-size:24px;line-height:1.05;text-align:center;text-transform:uppercase;letter-spacing:.02em}
+.parcel .meta{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--tag-muted);letter-spacing:.04em;margin-top:2px}
+.varies{background:var(--amber);color:var(--amber-ink);border-radius:3px;padding:1px 6px;font-weight:600}
+.flyer{position:fixed;z-index:50;width:72px;height:72px;pointer-events:none;filter:drop-shadow(0 4px 4px rgba(0,0,0,.3))}
+
+/* bins */
+.dock{padding:14px;border-top:1px solid var(--line)}
+.bins{--cols:var(--n);display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.bin{flex:0 0 calc((100% - (var(--cols) - 1) * 10px) / var(--cols));position:relative;border:2px solid transparent;background:transparent;border-radius:8px;padding:4px 2px 6px;display:grid;justify-items:center;gap:2px;transition:transform .12s}
+.bin:hover:not(:disabled),.bin.open{transform:translateY(-3px)}
+.bin:disabled{cursor:default}
+.binart{width:100%;max-width:120px;height:auto;display:block;overflow:visible}
+.lidg{transform-origin:8px 28px;transition:transform .15s ease-out}
+.bin:hover:not(:disabled) .lidg,.bin.open .lidg{transform:rotate(-24deg)}
+.bin .lb{font-weight:700;line-height:1.15;text-align:center;font-size:14.5px}
+.bin .sb{font-size:12px;color:var(--muted);line-height:1.25;text-align:center}
+.bin .key{position:absolute;top:2px;right:4px;font-family:var(--mono);font-weight:600;font-size:12px;background:var(--ink);color:var(--surface);border-radius:3px;padding:0 6px}
+.bin.hint{border-color:var(--amber);background:color-mix(in srgb,var(--amber) 14%,transparent);animation:glow 1.2s ease-in-out infinite}
+@keyframes glow{50%{box-shadow:0 0 0 4px color-mix(in srgb,var(--amber) 40%,transparent)}}
+.bin.right{border-color:var(--good);background:var(--good-bg)}
+.bin.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.bin.pop .binart{animation:pop .38s}
+@keyframes pop{30%{transform:scale(1.1,.88)}60%{transform:scale(.95,1.06)}100%{transform:none}}
+.bin.shake .binart{animation:shake .4s}
+@keyframes shake{20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(2px)}}
+.splat{opacity:0;transform-origin:60px 66px;transform:scale(.2);transition:opacity .15s,transform .25s cubic-bezier(.3,1.6,.5,1)}
+.bin.dirty .splat{opacity:1;transform:none}
+.spark{position:absolute;left:50%;top:30%;width:8px;height:8px;border-radius:2px;pointer-events:none;animation:spark .6s ease-out forwards}
+@keyframes spark{to{transform:translate(var(--dx),var(--dy)) rotate(200deg);opacity:0}}
+
+/* feedback */
+.why{margin:0 14px 14px;border-radius:6px;padding:14px 16px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;border:1px solid var(--line)}
+.why.good{background:var(--good-bg);border-color:var(--good)}
+.why.bad{background:var(--bad-bg);border-color:var(--bad)}
+.why .mark{font-family:var(--display);font-weight:900;font-size:22px;text-transform:uppercase;line-height:1}
+.why.good .mark{color:var(--good)} .why.bad .mark{color:var(--bad)}
+.why p{margin:0;max-width:62ch}
+.why p b{display:block}
+.btn{border:2px solid var(--ink);background:var(--ink);color:var(--surface);border-radius:5px;padding:9px 16px;font-weight:700;white-space:nowrap}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.amber{background:var(--amber);border-color:var(--amber);color:var(--amber-ink)}
+
+/* bale yard */
+.yard h2,.panel h2{font-family:var(--display);font-weight:700;font-size:22px;text-transform:uppercase;letter-spacing:.03em;margin:0 0 8px}
+.bales{display:grid;gap:8px}
+.bale{background:var(--surface);border:1px solid var(--line);border-radius:5px;padding:8px 10px;display:grid;gap:5px}
+.bale .row{display:flex;justify-content:space-between;gap:8px;font-size:13px}
+.bale .row span:last-child{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--muted)}
+.bale.flash{animation:flash .8s}
+@keyframes flash{30%{background:var(--bad-bg);border-color:var(--bad)}}
+.meter{height:10px;border-radius:2px;background:var(--surface-2);overflow:hidden;display:flex;border:1px solid var(--line)}
+.meter .p{background:var(--c)} .meter .x{background:repeating-linear-gradient(-45deg,var(--bad) 0 3px,transparent 3px 6px)}
+
+/* start + results */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:20px;display:grid;gap:16px}
+.lede{margin:0;max-width:62ch;font-size:17px}
+.countries{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(128px,1fr))}
+.country{border:2px solid var(--line);background:var(--surface-2);border-radius:6px;padding:10px 12px;text-align:left;display:grid;gap:2px}
+.country:hover{border-color:var(--muted)}
+.country[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--surface)}
+.country .rn{font-family:var(--display);font-weight:900;font-size:22px;text-transform:uppercase;line-height:1}
+.country .rc{font-family:var(--mono);font-size:11px;letter-spacing:.04em;opacity:.75}
+.region{border:2px solid var(--line);background:var(--surface-2);border-radius:6px;padding:14px;text-align:left;display:grid;gap:10px}
+.region .rn{font-family:var(--display);font-weight:900;font-size:26px;text-transform:uppercase;line-height:1}
+.region .rs{font-size:13.5px;color:var(--muted)}
+.minis{display:flex;gap:6px;flex-wrap:wrap}
+.mini{display:grid;justify-items:center;width:58px;gap:2px;font-size:10.5px;line-height:1.15;text-align:center;color:var(--muted)}
+.mini svg{width:40px;height:auto}
+.rules{display:grid;gap:6px;margin:0;padding:0;list-style:none;font-size:14.5px;color:var(--muted)}
+.rules li::before{content:"▸ ";color:var(--amber)}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.stats{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.stats>div{background:var(--surface-2);padding:12px 14px}
+.stats .v{font-family:var(--display);font-weight:900;font-size:38px;line-height:1;font-variant-numeric:tabular-nums}
+.stats .k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.misses{display:grid;gap:8px}
+.miss{display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:start;border-top:1px solid var(--line);padding-top:10px}
+.miss .art{width:52px;height:52px;background:var(--tag);border-radius:6px;padding:4px}
+.miss p{margin:0;font-size:14.5px}
+.miss .ans{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.foot{font-size:12.5px;color:var(--muted);max-width:75ch}
+
+@media (max-width:820px){
+  .stage{grid-template-columns:1fr}
+}
+/* phone: bins docked in the thumb zone, feedback as a bottom sheet */
+@media (max-width:700px){
+  body{padding-block:12px 24px}
+  #play{padding-bottom:var(--dockh,0px)}
+  .hud>div{padding:8px 10px}
+  .hud .k{font-size:9.5px;letter-spacing:.04em}
+  .hud .v{font-size:20px}
+  .belt{height:180px}
+  .how{display:none}
+  .parcel .art{width:76px;height:76px}
+  .parcel .nm{font-size:21px}
+  .dock{position:fixed;z-index:20;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -8px 20px rgba(0,0,0,.12);padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px))}
+  .bins{--cols:var(--mcols,4);gap:6px}
+  .bin{flex-basis:calc((100% - (var(--cols) - 1) * 6px) / var(--cols));padding:2px 0 4px}
+  .binart{max-width:74px}
+  .bin .sb{display:none}
+  .bin .lb{font-size:12.5px}
+  .bin .key{display:none}
+  .why{position:fixed;z-index:40;left:0;right:0;bottom:0;margin:0;border-radius:14px 14px 0 0;grid-template-columns:1fr;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 30px rgba(0,0,0,.25);animation:sheet .25s ease-out}
+  .why .btn{justify-self:stretch;padding:12px}
+  .yard .bales{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@keyframes sheet{from{transform:translateY(100%)}to{transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<svg class="defs" aria-hidden="true">
+  <defs>
+    <pattern id="p-stripes" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="4" height="10" fill="#fff"/></pattern>
+    <pattern id="p-dots" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="2.6" fill="#fff"/></pattern>
+    <pattern id="p-grid" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M12 0V12H0" fill="none" stroke="#fff" stroke-width="2"/></pattern>
+    <pattern id="p-zigzag" width="16" height="10" patternUnits="userSpaceOnUse"><path d="M0 8 L4 2 L8 8 L12 2 L16 8" fill="none" stroke="#fff" stroke-width="2"/></pattern>
+    <pattern id="p-checks" width="14" height="14" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#fff"/><rect x="7" y="7" width="7" height="7" fill="#fff"/></pattern>
+    <pattern id="p-waves" width="20" height="10" patternUnits="userSpaceOnUse"><path d="M0 5 Q5 0 10 5 T20 5" fill="none" stroke="#fff" stroke-width="2"/></pattern>
+    <pattern id="p-cross" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M6 0V12M0 6H12" stroke="#fff" stroke-width="2"/></pattern>
+    <pattern id="p-hbars" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="4" fill="#fff"/></pattern>
+    <pattern id="p-rings" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="4.5" fill="none" stroke="#fff" stroke-width="2"/></pattern>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>Sorting <span>Shift</span></h1>
+      <span class="tag" id="regionTag">Prototype · v0.3</span>
+    </div>
+    <div class="tools">
+      <button class="chip" id="soundBtn" aria-pressed="true">Sound: on</button>
+      <button class="chip" id="homeBtn" hidden>Change region</button>
+    </div>
+  </header>
+
+  <section class="panel" id="start">
+    <p class="lede">You run the sorting line at a recycling centre. Drag each item off the belt into the right bin. Sort it right and the bale stays clean. Sort it wrong and you contaminate the load.</p>
+    <div class="countries" id="regionPick" aria-label="Choose a country"></div>
+    <div class="region" id="preview" aria-live="polite"></div>
+    <ul class="rules">
+      <li>Drag the item to a bin, tap a bin, or press its number key. No timer.</li>
+      <li>Every answer comes with a one-line reason, right or wrong.</li>
+      <li>Items marked <span class="varies" style="font-family:var(--mono);font-size:11px">varies locally</span> are sorted differently in some towns. More than one bin may count as right.</li>
+      <li>Items you get wrong come back sooner next shift.</li>
+    </ul>
+    <div class="actions"><button class="btn amber" id="startBtn">Start shift</button></div>
+  </section>
+
+  <section id="play" hidden>
+    <div class="wrap">
+      <div class="hud">
+        <div><span class="k">Item</span><span class="v" id="hItem">1 / 10</span><div class="ticks" id="ticks"></div></div>
+        <div><span class="k">Combo</span><span class="v" id="hCombo">×0</span></div>
+        <div><span class="k">Kept from landfill</span><span class="v" id="hKg">0.00 kg</span></div>
+        <div><span class="k">Accuracy</span><span class="v" id="hAcc">–</span></div>
+      </div>
+      <div class="stage">
+        <div class="floor">
+          <div class="belt"><span class="cue" id="cue">Sort it!</span><span class="how" id="how">Drag · tap · keys</span><div class="parcel" id="parcel"></div></div>
+          <div class="dock" id="dock"><div class="bins" id="bins"></div></div>
+          <div id="whySlot"></div>
+        </div>
+        <div class="yard">
+          <h2>Bale yard</h2>
+          <div class="bales" id="bales"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="results" hidden></section>
+
+  <p class="foot">Prototype of the upasanasen/Game redesign. Rules are based on national guidance and large-city examples for each country (for instance Toronto for Canada and typical curbside programmes for the USA). Local rules vary, so check your municipality. Progress is saved only in this browser.</p>
+</div>
+
+<script>
+/* ---------- artwork (flat, one outline weight) ---------- */
+const O='stroke="#1B231F" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"';
+const svg=(b)=>`<svg viewBox="0 0 64 64" class="art" aria-hidden="true"><g ${O}>${b}</g></svg>`;
+const ART={
+ banana:svg(`<path d="M33 18 C22 22 14 34 12 50 C18 46 24 36 30 30 Z" fill="#F4C430"/><path d="M33 18 C44 22 52 34 54 50 C48 46 42 36 36 30 Z" fill="#F4C430"/><path d="M30 30 C28 40 30 50 33 57 C36 50 38 40 36 30 Z" fill="#E3A91A"/><path d="M30 9h6v10h-6z" fill="#7A5A1E"/>`),
+ eggshell:svg(`<path d="M8 32 L13 27 L18 33 L23 26 L28 32 L33 27 C36 42 30 52 21 52 C12 52 6 44 8 32Z" fill="#F3E6D0"/><path d="M33 40 L37 35 L41 40 L45 34 L49 39 L54 36 C57 49 51 57 44 57 C37 57 31 51 33 40Z" fill="#EAD8B8"/>`),
+ coffee:svg(`<path d="M12 22 L52 22 L40 55 L24 55 Z" fill="#F7F1E3"/><path d="M13 22 C20 12 44 12 51 22 Z" fill="#5A3A22"/><path d="M24 30 L27 46 M32 30 V48 M40 30 L37 46" fill="none" stroke-width="1.5"/>`),
+ bones:svg(`<g transform="rotate(-35 32 32)"><circle cx="13" cy="26" r="6" fill="#F2EAD8"/><circle cx="13" cy="38" r="6" fill="#F2EAD8"/><circle cx="51" cy="26" r="6" fill="#F2EAD8"/><circle cx="51" cy="38" r="6" fill="#F2EAD8"/><rect x="13" y="27" width="38" height="10" rx="3" fill="#F2EAD8"/></g>`),
+ shampoo:svg(`<rect x="26" y="8" width="12" height="12" rx="2" fill="#F2F2F2"/><rect x="19" y="19" width="26" height="38" rx="7" fill="#4FA3D9"/><rect x="24" y="31" width="16" height="13" rx="2" fill="#FFFFFF"/>`),
+ polybag:svg(`<path d="M22 22 C22 8 30 8 30 22 M34 22 C34 8 42 8 42 22" fill="none"/><path d="M13 22 L51 22 L55 56 L9 56 Z" fill="#D7ECF7"/><path d="M20 30 L24 48 M44 30 L40 44" fill="none" stroke-width="1.5"/>`),
+ chips:svg(`<path d="M16 9 L48 9 L46 18 L51 32 L46 46 L48 55 L16 55 L18 46 L13 32 L18 18 Z" fill="#E94F37"/><path d="M17 13 L21 11 L25 13 L29 11 L33 13 L37 11 L41 13 L45 11 M17 51 L21 53 L25 51 L29 53 L33 51 L37 53 L41 51 L45 53" fill="none" stroke-width="1.5"/><circle cx="32" cy="33" r="9" fill="#F4C430"/>`),
+ tube:svg(`<path d="M12 10 H52 V17 L40 46 H24 L12 17 Z" fill="#FFFFFF"/><path d="M15 22 H49 L45 32 H19 Z" fill="#2D66AE"/><rect x="25" y="46" width="14" height="11" rx="2" fill="#E94F37"/>`),
+ carton:svg(`<rect x="22" y="6" width="16" height="6" fill="#EEF3F7"/><path d="M16 24 L24 12 L36 12 L44 24Z" fill="#EEF3F7"/><path d="M44 24 L52 18 L52 52 L44 58Z" fill="#C9D6E2"/><rect x="16" y="24" width="28" height="34" fill="#FFFFFF"/><rect x="20" y="34" width="20" height="13" fill="#3C7BD0"/>`),
+ eggtray:svg(`<path d="M6 36 H58 L54 50 H10 Z" fill="#BFA98A"/><path d="M7 36 C7 25 18 25 18 36 C18 25 29 25 29 36 C29 25 40 25 40 36 C40 25 51 25 51 36 C51 25 58 26 57 36Z" fill="#D8C8AA"/>`),
+ box:svg(`<path d="M10 26 L22 16 L54 16 L42 26Z" fill="#D9A866"/><path d="M42 26 L54 16 L54 46 L42 56Z" fill="#A8743A"/><rect x="10" y="26" width="32" height="30" fill="#C8914F"/><path d="M20 26 L32 16" fill="none" stroke="#F2EAD8" stroke-width="4"/>`),
+ pizza:svg(`<path d="M5 30 L30 18 L59 30 L34 43Z" fill="#D9A866"/><path d="M5 30 L34 43 L34 51 L5 38Z" fill="#C8914F"/><path d="M34 43 L59 30 L59 38 L34 51Z" fill="#A8743A"/><ellipse cx="24" cy="30" rx="6" ry="3" fill="#8A5A2B" opacity=".55" stroke="none"/><ellipse cx="40" cy="33" rx="4" ry="2" fill="#8A5A2B" opacity=".55" stroke="none"/><circle cx="33" cy="26" r="4" fill="#E94F37"/>`),
+ newspaper:svg(`<rect x="10" y="12" width="44" height="42" fill="#F2F2EE"/><rect x="14" y="17" width="36" height="7" fill="#1B231F" stroke="none"/><path d="M14 30 H30 M14 35 H30 M14 40 H30 M14 45 H30 M34 30 H50 M34 35 H50 M34 40 H50" fill="none" stroke-width="1.6"/>`),
+ jar:svg(`<rect x="18" y="10" width="28" height="9" rx="2" fill="#8C959A"/><rect x="15" y="19" width="34" height="38" rx="7" fill="#CFEDEA"/><path d="M22 27 V46" fill="none" stroke="#FFFFFF" stroke-width="3"/>`),
+ wine:svg(`<path d="M28 5 H36 V20 C36 24 44 26 44 34 V58 H20 V34 C20 26 28 24 28 20 Z" fill="#2F6B3F"/><rect x="22" y="39" width="20" height="11" fill="#F2EAD8"/>`),
+ perfume:svg(`<rect x="23" y="7" width="18" height="8" rx="2" fill="#C0A060"/><rect x="28" y="15" width="8" height="9" fill="#D9D9D9"/><rect x="14" y="24" width="36" height="32" rx="5" fill="#F4C6DA"/><path d="M20 30 L26 50 M44 30 L38 50" fill="none" stroke="#FFFFFF" stroke-width="2.5"/>`),
+ tin:svg(`<path d="M15 16 V50 C15 57 49 57 49 50 V16" fill="#B8C0C4"/><path d="M15 26 H49 V42 H15Z" fill="#E94F37"/><ellipse cx="32" cy="16" rx="17" ry="5.5" fill="#D6DCDF"/>`),
+ window:svg(`<rect x="9" y="7" width="46" height="50" fill="#8A5A2B"/><rect x="14" y="12" width="36" height="40" fill="#BFE3F2"/><path d="M34 30 L24 14 M34 30 L48 20 M34 30 L44 50 M34 30 L18 42 M34 30 L30 50" fill="none" stroke-width="1.8"/>`),
+ drinkglass:svg(`<path d="M14 10 H42 L38 54 H18 Z" fill="#D8F0F4"/><path d="M24 11 L29 24 L23 32 L30 44" fill="none" stroke-width="1.8"/><path d="M46 44 L56 48 L50 56Z" fill="#D8F0F4"/>`),
+ mirror:svg(`<ellipse cx="32" cy="32" rx="22" ry="27" fill="#C0A060"/><ellipse cx="32" cy="32" rx="16" ry="21" fill="#BFD7E6"/><path d="M36 28 L30 12 M36 28 L46 24 M36 28 L42 46 M36 28 L22 40" fill="none" stroke-width="1.8"/>`),
+ tissue:svg(`<path d="M14 36 C9 26 20 15 28 20 C32 11 45 13 46 22 C55 22 57 35 50 40 C52 51 38 55 32 48 C24 55 11 48 14 36Z" fill="#FFFFFF"/><path d="M24 30 L32 36 M38 26 L36 36 M28 44 L40 42" fill="none" stroke-width="1.6"/>`),
+ diaper:svg(`<path d="M7 17 H57 V28 C50 30 44 37 42 55 H22 C20 37 14 30 7 28 Z" fill="#FFFFFF"/><rect x="7" y="17" width="9" height="8" fill="#7FC4E8"/><rect x="48" y="17" width="9" height="8" fill="#7FC4E8"/><path d="M16 24 H48" fill="none" stroke-width="1.6"/>`),
+ pad:svg(`<path d="M22 26 L9 29 L9 37 L22 40 Z" fill="#F4C6DA"/><path d="M42 26 L55 29 L55 37 L42 40 Z" fill="#F4C6DA"/><rect x="21" y="6" width="22" height="52" rx="11" fill="#FFFFFF"/><rect x="27" y="14" width="10" height="36" rx="5" fill="#F4C6DA" stroke="none"/>`),
+ battery:svg(`<rect x="50" y="27" width="6" height="10" rx="1" fill="#A8A8A8"/><rect x="8" y="19" width="43" height="26" rx="4" fill="#2D2D2D"/><rect x="8" y="19" width="13" height="26" rx="4" fill="#C8783A"/><path d="M36 28 V36 M32 32 H40" fill="none" stroke="#FFFFFF"/>`),
+ bulb:svg(`<rect x="19" y="8" width="26" height="9" rx="4.5" fill="#FFFDE8"/><rect x="19" y="18" width="26" height="9" rx="4.5" fill="#FFFDE8"/><rect x="19" y="28" width="26" height="9" rx="4.5" fill="#FFFDE8"/><rect x="23" y="39" width="18" height="8" fill="#FFFFFF"/><path d="M25 47 H39 V57 H25 Z" fill="#C9C9C9"/><path d="M25 51 H39" fill="none" stroke-width="1.5"/>`),
+ meds:svg(`<rect x="8" y="14" width="48" height="36" rx="5" fill="#D9DDE0"/><g fill="#E94F37"><rect x="14" y="20" width="10" height="8" rx="4"/><rect x="27" y="20" width="10" height="8" rx="4"/><rect x="40" y="20" width="10" height="8" rx="4"/><rect x="14" y="36" width="10" height="8" rx="4"/><rect x="27" y="36" width="10" height="8" rx="4"/></g><rect x="40" y="36" width="10" height="8" rx="4" fill="none" stroke-dasharray="2 2"/>`),
+ paint:svg(`<path d="M16 22 C16 4 48 4 48 22" fill="none"/><path d="M13 22 V52 C13 58 51 58 51 52 V22" fill="#B8C0C4"/><rect x="13" y="30" width="38" height="14" fill="#2D66AE"/><ellipse cx="32" cy="22" rx="19" ry="5.5" fill="#D6DCDF"/><path d="M20 23 C20 30 24 30 24 24 C26 34 30 32 30 25" fill="#2D66AE"/>`),
+ toy:svg(`<ellipse cx="35" cy="42" rx="20" ry="13" fill="#F4C430"/><circle cx="23" cy="24" r="11" fill="#F4C430"/><path d="M12 25 L4 28 L12 30 Z" fill="#E98A2B"/><circle cx="21" cy="21" r="1.8" fill="#1B231F" stroke="none"/><path d="M38 32 L42 40 L37 46 L42 54" fill="none" stroke-width="1.8"/>`)
+};
+/* bin glyphs, 28×28, drawn in white */
+const GLYPH={
+ leaf:`<path d="M4 24 C4 10 14 4 26 4 C26 16 20 24 4 24Z"/><path d="M4 24 L16 12"/>`,
+ recycle:`<path d="M10 5 L14 2 L18 5 M14 2 C21 4 25 11 24 18"/><path d="M24 18 L25 23 L20 23 M25 23 C19 27 10 26 6 21"/><path d="M6 21 L2 18 L6 14 M2 18 C1 12 4 6 10 5"/>`,
+ drop:`<path d="M14 3 C14 3 5 13 5 18 A9 9 0 0 0 23 18 C23 13 14 3 14 3Z"/>`,
+ warn:`<path d="M14 3 L26 25 H2 Z"/><path d="M14 11 V17 M14 21 V21.5"/>`,
+ bottle:`<path d="M11 3 H17 V8 C17 10 21 11 21 15 V26 H7 V15 C7 11 11 10 11 8Z"/>`,
+ box:`<path d="M3 9 L14 4 L25 9 V21 L14 26 L3 21Z M3 9 L14 14 L25 9 M14 14 V26"/>`,
+ jar:`<rect x="7" y="2" width="14" height="5" rx="1"/><rect x="5" y="8" width="18" height="18" rx="4"/>`,
+ can:`<ellipse cx="14" cy="6" rx="9" ry="3"/><path d="M5 6 V22 C5 26 23 26 23 22 V6"/>`,
+ apple:`<path d="M14 8 C8 3 3 8 4 15 C5 22 10 26 14 24 C18 26 23 22 24 15 C25 8 20 3 14 8Z"/><path d="M14 8 C14 5 16 3 18 2"/>`,
+ flame:`<path d="M14 3 C18 9 23 12 23 18 A9 8 0 0 1 5 18 C5 13 9 11 10 7 C12 10 13 11 14 12 C15 9 15 6 14 3Z"/>`,
+ truck:`<path d="M2 7 H17 V20 H2Z M17 11 H22 L26 15 V20 H17"/><circle cx="7" cy="22" r="3"/><circle cx="21" cy="22" r="3"/>`,
+ cross:`<rect x="3" y="3" width="22" height="22" rx="5"/><path d="M14 8 V20 M8 14 H20"/>`,
+ battery:`<rect x="3" y="8" width="20" height="12" rx="2"/><path d="M23 12 H26 V16 H23 M9 14 H15 M12 11 V17"/>`,
+ paper:`<path d="M6 3 H18 L23 8 V25 H6 Z M18 3 V8 H23 M10 13 H19 M10 17 H19 M10 21 H16"/>`,
+ carton:`<path d="M7 11 L10 4 H18 L21 11 V26 H7 Z M7 11 H21"/>`,
+ shirt:`<path d="M9 3 L3 8 L6 13 L8 12 V25 H20 V12 L22 13 L25 8 L19 3 C18 6 10 6 9 3Z"/>`,
+ bag:`<path d="M5 9 H23 L21 26 H7 Z M10 9 C10 2 18 2 18 9"/>`,
+ trash:`<path d="M4 7 H24 M11 7 V4 H17 V7 M6 7 L8 26 H20 L22 7 M12 12 V21 M16 12 V21"/>`
+};
+const PATS=["stripes","dots","grid","zigzag","checks","waves","cross","hbars","rings"];
+function binSvg(b){
+  const body="M12 30 H108 L100 106 H20 Z";
+  return `<svg viewBox="0 0 120 112" class="binart" aria-hidden="true">
+    <g class="lidg"><rect x="46" y="9" width="28" height="8" rx="3" fill="${b.c}" stroke="#1B231F" stroke-width="3"/><rect x="4" y="16" width="112" height="13" rx="4" fill="${b.c}" stroke="#1B231F" stroke-width="3"/></g>
+    <path d="${body}" fill="${b.c}" stroke="#1B231F" stroke-width="3" stroke-linejoin="round"/>
+    <path d="${body}" fill="url(#p-${b.pat})" opacity=".3"/>
+    <circle cx="60" cy="66" r="21" fill="rgba(0,0,0,.28)"/>
+    <g transform="translate(46 52)" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">${GLYPH[b.g]}</g>
+    <g class="splat"><path d="M46 44 C52 36 66 38 70 46 C81 44 84 58 75 62 C79 73 64 78 58 70 C49 77 38 68 43 60 C34 56 38 44 46 44Z" fill="#6B4A2A"/><circle cx="84" cy="48" r="4" fill="#6B4A2A"/><circle cx="36" cy="76" r="3" fill="#6B4A2A"/></g>
+  </svg>`;
+}
+
+/* ---------- content ---------- */
+// Item art, weight and difficulty are shared; each region supplies bins and per-item answers.
+const ITEMS=[
+ {id:"banana",n:"Banana peel",kg:.15,d:1},{id:"eggshell",n:"Egg shells",kg:.05,d:1},{id:"coffee",n:"Coffee grounds",kg:.2,d:1},
+ {id:"bones",n:"Chicken bones",kg:.2,d:2},{id:"shampoo",n:"Shampoo bottle",kg:.05,d:1},{id:"polybag",n:"Polybag",kg:.01,d:2},
+ {id:"chips",n:"Chips packet",kg:.01,d:2},{id:"tube",n:"Toothpaste tube",kg:.02,d:2},{id:"carton",n:"Milk carton",kg:.03,d:2},
+ {id:"eggtray",n:"Egg tray",kg:.04,d:2},{id:"box",n:"Cardboard box",kg:.3,d:1},{id:"pizza",n:"Greasy pizza box",kg:.2,d:2},
+ {id:"newspaper",n:"Newspaper",kg:.25,d:1},{id:"jar",n:"Glass jar",kg:.25,d:1},{id:"wine",n:"Wine bottle",kg:.45,d:1},
+ {id:"perfume",n:"Perfume bottle",kg:.12,d:2},{id:"tin",n:"Food tin",kg:.08,d:1},{id:"window",n:"Broken window glass",kg:1.2,d:3},
+ {id:"drinkglass",n:"Broken drinking glass",kg:.2,d:3},{id:"mirror",n:"Broken mirror",kg:.8,d:3},{id:"tissue",n:"Used tissue",kg:.01,d:2},
+ {id:"diaper",n:"Diaper",kg:.2,d:1},{id:"pad",n:"Sanitary pad",kg:.02,d:1},{id:"battery",n:"AA battery",kg:.02,d:2},
+ {id:"bulb",n:"Energy-saving bulb",kg:.08,d:2},{id:"meds",n:"Expired medicines",kg:.05,d:2},{id:"paint",n:"Half-full paint can",kg:1,d:3},
+ {id:"toy",n:"Broken plastic toy",kg:.3,d:3}
+];
+const REGIONS=/*REGIONS*/{"canada": {"name": "Canada", "sub": "Toronto-style curbside Blue Bin, Green Bin and Garbage, plus hazardous-waste depots and pharmacy take-back.", "bins": [{"id": "blue", "label": "Blue bin", "sub": "Packaging, paper, cans, glass, bags", "c": "#1F5FA8", "divert": true, "g": "recycle", "pat": "stripes"}, {"id": "green", "label": "Green bin", "sub": "Food, soiled paper, diapers", "c": "#3C8A50", "divert": true, "g": "leaf", "pat": "dots"}, {"id": "garbage", "label": "Garbage", "sub": "Everything that cannot be recycled", "c": "#454C55", "divert": false, "g": "trash", "pat": "grid"}, {"id": "depot", "label": "Hazardous depot", "sub": "Batteries, bulbs, paint, chemicals", "c": "#B2413A", "divert": true, "g": "warn", "pat": "zigzag"}, {"id": "pharmacy", "label": "Pharmacy", "sub": "Old medicines and sharps", "c": "#7A4FA0", "divert": true, "g": "cross", "pat": "checks"}], "items": {"banana": {"a": ["green"], "w": "Food scraps go in the Green Bin, where they are turned into compost and biogas.", "v": false}, "eggshell": {"a": ["green"], "w": "Egg shells are accepted in the Green Bin with other food scraps.", "v": false}, "coffee": {"a": ["green"], "w": "Coffee grounds and paper filters both go in the Green Bin.", "v": false}, "bones": {"a": ["green"], "w": "Toronto's Green Bin takes meat, fish and poultry, bones included; they are processed industrially, not in a backyard composter.", "v": false}, "shampoo": {"a": ["blue"], "w": "Empty plastic bottles go in the Blue Bin; put the cap back on.", "v": false}, "polybag": {"a": ["blue"], "w": "Since 2026 Ontario's Blue Bin takes plastic bags; stuff them all into one bag. Many other provinces only take them at depots or stores.", "v": true}, "chips": {"a": ["blue"], "w": "Ontario's 2026 Blue Bin accepts chip bags and snack wrappers; elsewhere in Canada they often still go in the garbage.", "v": true}, "tube": {"a": ["blue"], "w": "Toothpaste tubes became Blue Bin items in Ontario in 2026; many other provinces still say garbage.", "v": true}, "carton": {"a": ["blue"], "w": "Milk and juice cartons are recycled in the Blue Bin across Canada.", "v": false}, "eggtray": {"a": ["blue"], "w": "Paper egg cartons go in the Blue Bin with boxboard; some cities put them in organics instead.", "v": true}, "box": {"a": ["blue"], "w": "Flatten cardboard boxes and put them in the Blue Bin.", "v": false}, "pizza": {"a": ["green", "blue"], "w": "Greasy or food-soiled pizza boxes go in the Green Bin; a clean, empty box can go in the Blue Bin.", "v": true}, "newspaper": {"a": ["blue"], "w": "Newspapers and flyers go in the Blue Bin.", "v": false}, "jar": {"a": ["blue"], "w": "Empty glass jars go in the Blue Bin; take the lid off.", "v": false}, "wine": {"a": ["blue"], "w": "The Blue Bin takes wine bottles, but most provinces pay a deposit refund if you return them to a store or depot.", "v": true}, "perfume": {"a": ["blue"], "w": "Empty glass perfume bottles count as cosmetic containers in Ontario's Blue Bin; some cities say garbage.", "v": true}, "tin": {"a": ["blue"], "w": "Rinsed food cans go in the Blue Bin.", "v": false}, "window": {"a": ["garbage"], "w": "Window glass melts differently from bottle glass, so wrap it safely and put it in the garbage.", "v": false}, "drinkglass": {"a": ["garbage"], "w": "Drinking glasses and dishes are not accepted for recycling; wrap broken pieces and put them in the garbage.", "v": false}, "mirror": {"a": ["garbage"], "w": "Mirrors are coated and cannot be recycled; wrap broken pieces and put them in the garbage.", "v": false}, "tissue": {"a": ["green"], "w": "Toronto takes used tissues in the Green Bin; many other cities send them to garbage.", "v": true}, "diaper": {"a": ["green"], "w": "Toronto's Green Bin accepts diapers; most other Canadian cities want them in the garbage.", "v": true}, "pad": {"a": ["green"], "w": "Toronto's Green Bin accepts pads and tampons; most other cities want them in the garbage.", "v": true}, "battery": {"a": ["depot"], "w": "Batteries can start fires in trucks; take them to a depot or a store battery collection box.", "v": false}, "bulb": {"a": ["depot"], "w": "CFLs contain a little mercury, so take them to a hazardous waste depot or a retailer take-back.", "v": false}, "meds": {"a": ["pharmacy"], "w": "Return expired medicines to any pharmacy for free, safe disposal.", "v": false}, "paint": {"a": ["depot"], "w": "Leftover paint goes to a depot or a participating paint retailer, where it is recycled.", "v": false}, "toy": {"a": ["garbage"], "w": "Broken plastic toys are not packaging, so they go in the garbage. Toys with batteries or electronics go to e-waste.", "v": false}}}, "denmark": {"name": "Denmark", "sub": "The national harmonised 10-fraction system with shared pictograms used by every municipality.", "bins": [{"id": "food", "label": "Food waste", "sub": "Peels, scraps, bones, coffee", "c": "#00A04B", "divert": true, "g": "apple", "pat": "stripes"}, {"id": "paper", "label": "Paper", "sub": "Newspapers, letters, magazines", "c": "#0082BE", "divert": true, "g": "paper", "pat": "dots"}, {"id": "cardboard", "label": "Cardboard", "sub": "Boxes and egg trays", "c": "#BEA064", "divert": true, "g": "box", "pat": "grid"}, {"id": "cartons", "label": "Cartons", "sub": "Milk, juice, tomato cartons", "c": "#BEA064", "divert": true, "g": "carton", "pat": "zigzag"}, {"id": "glass", "label": "Glass", "sub": "Bottles, jars, drinking glasses", "c": "#21B685", "divert": true, "g": "jar", "pat": "checks"}, {"id": "metal", "label": "Metal", "sub": "Tins, lids, foil, cans", "c": "#5A6E78", "divert": true, "g": "can", "pat": "waves"}, {"id": "plastic", "label": "Plastic", "sub": "Bottles, bags, tubs, film", "c": "#961E82", "divert": true, "g": "bottle", "pat": "cross"}, {"id": "hazardous", "label": "Hazardous", "sub": "Batteries, bulbs, paint, chemicals", "c": "#E10F1E", "divert": true, "g": "warn", "pat": "hbars"}, {"id": "general", "label": "Residual", "sub": "Burned for heat and power", "c": "#141414", "divert": false, "g": "flame", "pat": "rings"}], "items": {"banana": {"a": ["food"], "w": "Food scraps go in the green food-waste bin and become biogas and fertiliser.", "v": false}, "eggshell": {"a": ["food"], "w": "Egg shells are listed as food waste alongside other kitchen scraps.", "v": false}, "coffee": {"a": ["food"], "w": "Coffee grounds and paper filters both go in food waste.", "v": false}, "bones": {"a": ["food"], "w": "Bones and fish bones are accepted in Danish food waste.", "v": false}, "shampoo": {"a": ["plastic"], "w": "Empty plastic bottles go in plastic; the cap can stay on.", "v": false}, "polybag": {"a": ["plastic"], "w": "Soft plastic like carrier bags is collected with hard plastic in Denmark.", "v": false}, "chips": {"a": ["general", "plastic"], "w": "Most kommuner say residual because it is mixed foil; if it carries the plastic pictogram, plastic is fine.", "v": true}, "tube": {"a": ["plastic", "general"], "w": "Copenhagen says plastic or metal by material; some kommuner, like Aarhus, want tubes in residual.", "v": true}, "carton": {"a": ["cartons"], "w": "Milk cartons have their own fraction; empty them, no rinsing needed.", "v": true}, "eggtray": {"a": ["cardboard", "general"], "w": "Clean egg trays usually go with cardboard, but a few kommuner send them to residual.", "v": true}, "box": {"a": ["cardboard"], "w": "Flatten cardboard boxes and put them in the cardboard (pap) bin.", "v": false}, "pizza": {"a": ["general", "cardboard"], "w": "Food residue spoils the cardboard, so it is residual; Copenhagen now accepts empty pizza boxes as cardboard.", "v": true}, "newspaper": {"a": ["paper"], "w": "Newspapers are the classic paper fraction and get recycled into new paper.", "v": false}, "jar": {"a": ["glass"], "w": "Empty glass jars go in glass; put metal lids in metal.", "v": false}, "wine": {"a": ["glass"], "w": "Wine bottles have no deposit in Denmark, so they go in the glass bin.", "v": false}, "perfume": {"a": ["glass"], "w": "An empty perfume bottle can go in glass; remove the pump and cap if possible.", "v": true}, "tin": {"a": ["metal"], "w": "Empty food tins go in metal; no need to wash them.", "v": false}, "window": {"a": ["general"], "w": "Small shards of window glass can go in residual, wrapped; whole panes go to the genbrugsplads.", "v": true}, "drinkglass": {"a": ["glass"], "w": "Unlike many countries, Danish glass collection takes drinking glasses and wrapped shards too.", "v": true}, "mirror": {"a": ["general"], "w": "Mirror glass has a coating that spoils glass recycling, so small pieces go in residual.", "v": true}, "tissue": {"a": ["general"], "w": "Used tissues are residual waste in Denmark, not food waste.", "v": false}, "diaper": {"a": ["general"], "w": "Nappies are residual waste and are burned for district heating.", "v": false}, "pad": {"a": ["general"], "w": "Hygiene products go in residual waste.", "v": false}, "battery": {"a": ["hazardous"], "w": "Batteries are hazardous; use the kommune's battery bag or box, or a shop collection point.", "v": false}, "bulb": {"a": ["hazardous"], "w": "Energy-saving bulbs contain mercury, so take them to hazardous waste or the genbrugsplads.", "v": false}, "meds": {"a": ["hazardous"], "w": "Leftover medicine is hazardous waste; hand it in at any pharmacy (apotek).", "v": false}, "paint": {"a": ["hazardous"], "w": "Paint with contents left is hazardous waste; take it to the genbrugsplads or miljøkasse.", "v": false}, "toy": {"a": ["plastic", "general"], "w": "Plastic toys without electronics can go in plastic; larger ones go to the genbrugsplads.", "v": true}}}, "finland": {"name": "Finland", "sub": "Waste Act separate collection of biowaste and packaging (cardboard, glass, metal, plastic) plus paper, with Rinki eco-points and HSY/Sortti rules.", "bins": [{"id": "bio", "label": "Biowaste", "sub": "Food scraps, coffee, soft paper", "c": "#6B4F2A", "divert": true, "g": "leaf", "pat": "stripes"}, {"id": "cardboard", "label": "Cardboard", "sub": "Kartonki: cartons, boxes, trays", "c": "#2F6DB5", "divert": true, "g": "box", "pat": "dots"}, {"id": "paper", "label": "Paper", "sub": "Newspapers, magazines, letters", "c": "#3C8A50", "divert": true, "g": "paper", "pat": "grid"}, {"id": "glass", "label": "Glass", "sub": "Bottles and jars only", "c": "#1F8483", "divert": true, "g": "jar", "pat": "zigzag"}, {"id": "metal", "label": "Metal", "sub": "Tins, lids, empty cans", "c": "#4A4F55", "divert": true, "g": "can", "pat": "checks"}, {"id": "plastic", "label": "Plastic", "sub": "Bottles, bags, tubes, crisp packets", "c": "#E0B000", "divert": true, "g": "bottle", "pat": "waves"}, {"id": "general", "label": "Mixed waste", "sub": "Burned for energy", "c": "#6F7773", "divert": false, "g": "flame", "pat": "cross"}, {"id": "hazardous", "label": "Hazardous", "sub": "Batteries, bulbs, paint, chemicals", "c": "#C8102E", "divert": true, "g": "warn", "pat": "hbars"}, {"id": "pharmacy", "label": "Pharmacy", "sub": "Medicines and needles", "c": "#2E8B57", "divert": true, "g": "cross", "pat": "rings"}], "items": {"banana": {"a": ["bio"], "w": "Fruit peels are biowaste and become biogas and compost.", "v": false}, "eggshell": {"a": ["bio"], "w": "Egg shells go in biowaste with other kitchen scraps.", "v": false}, "coffee": {"a": ["bio"], "w": "Coffee grounds and paper filters both go in biowaste.", "v": false}, "bones": {"a": ["bio"], "w": "Bones and fish bones are accepted in Finnish biowaste.", "v": false}, "shampoo": {"a": ["plastic"], "w": "Empty plastic bottles go in plastic packaging collection.", "v": false}, "polybag": {"a": ["plastic"], "w": "Plastic bags are plastic packaging; they also work as a bag for other plastic packaging.", "v": false}, "chips": {"a": ["plastic"], "w": "Foil-lined crisp packets are mostly plastic, so they go in plastic packaging.", "v": false}, "tube": {"a": ["plastic"], "w": "Squeeze out what you can; plastic tubes go in plastic packaging, metal ones in metal.", "v": true}, "carton": {"a": ["cardboard"], "w": "Milk and juice cartons go in cardboard packaging (kartonki); rinse and flatten them.", "v": false}, "eggtray": {"a": ["cardboard", "bio"], "w": "Egg trays go with cardboard packaging; HSY also accepts them in biowaste.", "v": true}, "box": {"a": ["cardboard"], "w": "Flatten cardboard boxes into cardboard packaging collection.", "v": false}, "pizza": {"a": ["cardboard", "general"], "w": "HSY accepts slightly greasy pizza boxes as cardboard; scrape off food, and very dirty ones go to mixed.", "v": true}, "newspaper": {"a": ["paper"], "w": "Newspapers go in paper collection, separate from cardboard packaging.", "v": false}, "jar": {"a": ["glass"], "w": "Empty glass jars go in glass packaging; put the metal lid in metal.", "v": false}, "wine": {"a": ["glass"], "w": "Non-deposit wine bottles go in glass packaging; deposit bottles go back to the shop.", "v": true}, "perfume": {"a": ["glass"], "w": "An empty perfume bottle counts as glass packaging; loose caps go elsewhere.", "v": false}, "tin": {"a": ["metal"], "w": "Empty food tins go in metal collection.", "v": false}, "window": {"a": ["general"], "w": "Wrap small window shards and put them in mixed waste; whole windows go to a Sortti station.", "v": true}, "drinkglass": {"a": ["general"], "w": "Drinking glasses melt differently from bottles, so they go in mixed waste, not glass.", "v": false}, "mirror": {"a": ["general"], "w": "Mirror glass is not packaging and its coating harms recycling, so it goes in mixed waste.", "v": false}, "tissue": {"a": ["bio"], "w": "In HSY's area and many others, used tissues and paper towels go in biowaste.", "v": true}, "diaper": {"a": ["general"], "w": "Nappies go in mixed waste, which is burned for energy.", "v": false}, "pad": {"a": ["general"], "w": "Sanitary pads go in mixed waste.", "v": false}, "battery": {"a": ["hazardous"], "w": "Batteries are hazardous; any shop selling them has a free collection box.", "v": false}, "bulb": {"a": ["hazardous"], "w": "Energy-saving bulbs contain mercury; take them to a hazardous or electrical waste point.", "v": false}, "meds": {"a": ["pharmacy"], "w": "Pharmacies take back household medicines and needles for free.", "v": false}, "paint": {"a": ["hazardous"], "w": "A part-full paint can is hazardous; only an empty, dried can may go with metal.", "v": false}, "toy": {"a": ["general"], "w": "Finnish plastic collection is for packaging only, so plastic toys go in mixed waste.", "v": true}}}, "france": {"name": "France", "sub": "Citeo's harmonised national sorting rules (Triman / Info-tri): all packaging and paper in the yellow bin since 2023, glass banks, and mandatory food-waste sorting since January 2024.", "bins": [{"id": "yellow", "label": "Yellow bin", "sub": "Emballages: all packaging, paper", "c": "#F2C500", "divert": true, "g": "recycle", "pat": "stripes"}, {"id": "glass", "label": "Glass bank", "sub": "Verre: bottles, jars, pots", "c": "#2E8B57", "divert": true, "g": "jar", "pat": "dots"}, {"id": "bio", "label": "Brown bin", "sub": "Biodéchets: food scraps, grounds", "c": "#7B4A2D", "divert": true, "g": "leaf", "pat": "grid"}, {"id": "residual", "label": "Grey bin", "sub": "Ordures ménagères: the rest", "c": "#5A5A5A", "divert": false, "g": "trash", "pat": "zigzag"}, {"id": "store", "label": "Shop drop-off", "sub": "Piles & ampoules: batteries, bulbs", "c": "#1F6FB2", "divert": true, "g": "battery", "pat": "checks"}, {"id": "pharmacy", "label": "Pharmacy", "sub": "Cyclamed: unused medicines", "c": "#1FA34A", "divert": true, "g": "cross", "pat": "waves"}, {"id": "dechetterie", "label": "Déchèterie", "sub": "Paint, flat glass, bulky items", "c": "#E07B00", "divert": true, "g": "truck", "pat": "cross"}], "items": {"banana": {"a": ["bio"], "w": "Fruit peel is food waste, and since 2024 every household must sort it out via a brown bin or compost.", "v": false}, "eggshell": {"a": ["bio"], "w": "Egg shells break down in compost and are accepted by food-waste collections.", "v": false}, "coffee": {"a": ["bio"], "w": "Coffee grounds are ideal compost material; paper filters can go in with them.", "v": false}, "bones": {"a": ["bio", "residual"], "w": "Most municipal food-waste bins take meat scraps and bones, but home compost can't break them down, so there they go in the grey bin.", "v": true}, "shampoo": {"a": ["yellow"], "w": "Plastic bottles are packaging; empty it and put it in the yellow bin with the cap on.", "v": false}, "polybag": {"a": ["yellow"], "w": "Since the extended sorting rules, all plastic packaging including bags and films goes in the yellow bin.", "v": false}, "chips": {"a": ["yellow"], "w": "Crisp packets are packaging, so under the extended rules they go in the yellow bin.", "v": false}, "tube": {"a": ["yellow"], "w": "Toothpaste tubes are packaging; the national rules accept them in the yellow bin, no need to clean.", "v": false}, "carton": {"a": ["yellow"], "w": "Drink cartons are recycled for their paper fibres and go in the yellow bin, emptied and flattened.", "v": false}, "eggtray": {"a": ["yellow", "bio"], "w": "It's cardboard packaging for the yellow bin; moulded pulp can also be composted.", "v": false}, "box": {"a": ["yellow", "dechetterie"], "w": "Flattened cardboard goes in the yellow bin; very large boxes go to the recycling centre.", "v": false}, "pizza": {"a": ["yellow", "residual"], "w": "Emptied pizza boxes go in the yellow bin, but some areas ask for greasy or food-soaked parts to go in the grey bin.", "v": true}, "newspaper": {"a": ["yellow"], "w": "All paper goes in the yellow bin in most areas, though some towns still have a separate paper bank.", "v": true}, "jar": {"a": ["glass"], "w": "Glass jars are packaging glass; put them in the bottle bank and the metal lid in the yellow bin.", "v": false}, "wine": {"a": ["glass"], "w": "Glass bottles go in the glass bank and are recycled into new bottles endlessly.", "v": false}, "perfume": {"a": ["glass"], "w": "A glass perfume bottle is packaging glass, so it goes in the glass bank.", "v": false}, "tin": {"a": ["yellow"], "w": "Steel and aluminium food tins go in the yellow bin; metal is sorted out magnetically and recycled.", "v": false}, "window": {"a": ["dechetterie"], "w": "Window glass melts at a different temperature from bottle glass, so take it to the recycling centre, not the glass bank.", "v": false}, "drinkglass": {"a": ["residual"], "w": "Drinking glasses have a different composition from bottle glass and would spoil a recycling batch, so wrap it and bin it.", "v": false}, "mirror": {"a": ["dechetterie", "residual"], "w": "Mirror glass is coated and can't go in the glass bank; take it to the recycling centre or wrap small pieces for the grey bin.", "v": false}, "tissue": {"a": ["residual", "bio"], "w": "Used tissues can't be recycled; they go in the grey bin, though many food-waste collections also accept them.", "v": true}, "diaper": {"a": ["residual"], "w": "Nappies mix plastic, pulp and waste, so they can't be recycled and go in the grey bin.", "v": false}, "pad": {"a": ["residual"], "w": "Sanitary products are hygiene waste and go in the grey bin, never the toilet.", "v": false}, "battery": {"a": ["store", "dechetterie"], "w": "Batteries contain metals that can be recovered; every shop selling them has a free drop-off box.", "v": false}, "bulb": {"a": ["store", "dechetterie"], "w": "Energy-saving bulbs contain a little mercury, so take them to a shop collection box or recycling centre.", "v": false}, "meds": {"a": ["pharmacy"], "w": "Take unused medicines to any pharmacy for safe destruction; the empty cardboard box goes in the yellow bin.", "v": false}, "paint": {"a": ["dechetterie"], "w": "Leftover paint is hazardous waste and goes to the recycling centre or a paint-shop take-back point.", "v": false}, "toy": {"a": ["residual", "dechetterie"], "w": "Toys aren't packaging, so they don't go in the yellow bin; small broken toys go in the grey bin, larger ones to the recycling centre.", "v": true}}}, "india": {"name": "India", "sub": "Solid Waste Management Rules 2026: four streams, mandatory since 1 April 2026.", "bins": [{"id": "wet", "label": "Wet", "sub": "Food and garden waste", "c": "#3C8A50", "divert": true, "g": "leaf", "pat": "stripes"}, {"id": "dry", "label": "Dry", "sub": "Plastic, paper, cartons, glass, metal", "c": "#2D66AE", "divert": true, "g": "recycle", "pat": "dots"}, {"id": "sanitary", "label": "Sanitary", "sub": "Tissues, pads, diapers", "c": "#B2413A", "divert": false, "g": "drop", "pat": "grid"}, {"id": "special", "label": "Special care", "sub": "Broken glass, batteries, bulbs, medicines", "c": "#454C55", "divert": true, "g": "warn", "pat": "zigzag"}], "items": {"banana": {"a": ["wet"], "w": "Food scraps compost. Keeping them out of dry waste keeps paper and plastic clean.", "v": false}, "eggshell": {"a": ["wet"], "w": "Shells are food waste and break down with the rest of the wet stream.", "v": false}, "coffee": {"a": ["wet"], "w": "Grounds are rich compost material, so they belong with wet waste.", "v": false}, "bones": {"a": ["wet"], "w": "Bones are food waste, even though they break down slowly.", "v": false}, "shampoo": {"a": ["dry"], "w": "Empty, rinsed plastic bottles are dry waste.", "v": false}, "polybag": {"a": ["dry"], "w": "Clean, dry polybags are dry waste. Food-soiled plastic contaminates the dry load.", "v": true}, "chips": {"a": ["dry"], "w": "It looks like foil but it's mostly plastic film. Dry waste.", "v": false}, "tube": {"a": ["dry"], "w": "Squeeze it empty. The tube is dry waste.", "v": false}, "carton": {"a": ["dry"], "w": "Cartons are about 70% paperboard with plastic and aluminium layers. Rinse, flatten, dry waste.", "v": true}, "eggtray": {"a": ["dry"], "w": "Moulded pulp is paper, so it's dry waste.", "v": false}, "box": {"a": ["dry"], "w": "Flatten boxes before they go in with dry waste.", "v": false}, "pizza": {"a": ["dry"], "w": "Scrape off the food first. A little grease is fine; cheese-covered parts go in wet waste.", "v": true}, "newspaper": {"a": ["dry"], "w": "Clean paper is dry waste and one of the most valuable recyclables.", "v": false}, "jar": {"a": ["dry"], "w": "Whole glass jars are dry waste. Keep them whole; broken glass is special care.", "v": false}, "wine": {"a": ["dry"], "w": "Whole glass bottles are dry waste.", "v": false}, "perfume": {"a": ["dry"], "w": "It's glass packaging, so it's dry waste. UK surveys find this is the most-missed recyclable.", "v": false}, "tin": {"a": ["dry"], "w": "Rinsed metal tins are dry waste.", "v": false}, "window": {"a": ["special"], "w": "Broken glass is special care under the 2026 rules. It injures waste workers and needs separate handling.", "v": false}, "drinkglass": {"a": ["special"], "w": "Broken glass of any kind is special care.", "v": false}, "mirror": {"a": ["special"], "w": "Broken glass is special care, and the mirror coating makes it worse for glass recycling.", "v": false}, "tissue": {"a": ["sanitary"], "w": "Used tissues are sanitary waste. Wrap them so workers don't handle them.", "v": false}, "diaper": {"a": ["sanitary"], "w": "Diapers are sanitary waste. Wrap them before disposal.", "v": false}, "pad": {"a": ["sanitary"], "w": "Wrap it in paper and put it in sanitary waste.", "v": false}, "battery": {"a": ["special"], "w": "Batteries contain toxic metals and can start fires. Special care.", "v": false}, "bulb": {"a": ["special"], "w": "CFL bulbs contain mercury, so they're special care.", "v": false}, "meds": {"a": ["special"], "w": "Medicines are special care. Never flush them.", "v": false}, "paint": {"a": ["special"], "w": "Leftover paint is special care. It pollutes water if dumped.", "v": false}, "toy": {"a": ["dry"], "w": "Clean plastic items go with dry waste.", "v": false}}}, "italy": {"name": "Italy", "sub": "Municipal raccolta differenziata following CONAI consortium guidance (Comieco, Corepla, CoReVe), typically door-to-door with plastica e metalli collected together.", "bins": [{"id": "organico", "label": "Organico", "sub": "Umido: food scraps, soiled paper", "c": "#7B4A2D", "divert": true, "g": "leaf", "pat": "stripes"}, {"id": "carta", "label": "Carta", "sub": "Paper, cardboard, drink cartons", "c": "#1F5FBF", "divert": true, "g": "paper", "pat": "dots"}, {"id": "plastica", "label": "Plastica", "sub": "Plastic packaging, cans, tins", "c": "#F2C500", "divert": true, "g": "bottle", "pat": "grid"}, {"id": "vetro", "label": "Vetro", "sub": "Glass bottles and jars", "c": "#2E8B57", "divert": true, "g": "jar", "pat": "zigzag"}, {"id": "secco", "label": "Secco", "sub": "Indifferenziato: the rest", "c": "#5A5A5A", "divert": false, "g": "trash", "pat": "checks"}, {"id": "pile", "label": "Battery box", "sub": "Pile esauste", "c": "#C8102E", "divert": true, "g": "battery", "pat": "waves"}, {"id": "farmaci", "label": "Pharmacy bin", "sub": "Farmaci scaduti", "c": "#1FA34A", "divert": true, "g": "cross", "pat": "cross"}, {"id": "centro", "label": "Isola ecologica", "sub": "RAEE, paint, bulky, hazardous", "c": "#E07B00", "divert": true, "g": "truck", "pat": "hbars"}], "items": {"banana": {"a": ["organico"], "w": "Fruit peel is food waste and becomes compost or biogas via the umido bin.", "v": false}, "eggshell": {"a": ["organico"], "w": "Egg shells are food waste and go in the umido with other kitchen scraps.", "v": false}, "coffee": {"a": ["organico"], "w": "Coffee grounds go in the organico; plastic or aluminium capsules usually don't.", "v": false}, "bones": {"a": ["organico"], "w": "Italian food-waste collections accept meat and fish bones along with other scraps.", "v": false}, "shampoo": {"a": ["plastica"], "w": "Empty plastic bottles are packaging and go in the plastic and metal bin.", "v": false}, "polybag": {"a": ["organico", "plastica"], "w": "Thin shopping bags in Italy must be compostable, so they're reused as umido liners; a conventional plastic bag goes in plastica.", "v": true}, "chips": {"a": ["plastica"], "w": "Corepla confirms crisp packets are plastic packaging even though they look metallic inside.", "v": false}, "tube": {"a": ["plastica"], "w": "Corepla counts toothpaste tubes as plastic packaging, so squeeze it out and put it in plastica.", "v": false}, "carton": {"a": ["carta", "plastica"], "w": "Cities like Milan and Rome collect drink cartons with paper, but some towns want them with plastic; check locally.", "v": true}, "eggtray": {"a": ["carta"], "w": "Moulded pulp egg trays are paper packaging and go in carta e cartone.", "v": false}, "box": {"a": ["carta"], "w": "Flatten cardboard boxes and put them in the paper bin; large ones go to the recycling centre.", "v": false}, "pizza": {"a": ["carta", "organico", "secco"], "w": "Comieco says emptied boxes with grease stains go in carta, but many towns ask for soaked parts to go in organico or secco.", "v": true}, "newspaper": {"a": ["carta"], "w": "Newspapers and magazines are the classic carta e cartone material.", "v": false}, "jar": {"a": ["vetro"], "w": "Glass jars go in the green glass bell; lids go in plastica e metalli.", "v": false}, "wine": {"a": ["vetro"], "w": "Glass bottles go in the vetro bell and are melted into new bottles.", "v": false}, "perfume": {"a": ["vetro"], "w": "A glass perfume bottle is packaging glass, so it goes in vetro, with the pump removed if possible.", "v": false}, "tin": {"a": ["plastica", "vetro"], "w": "Most cities collect tins with plastic, but some put metals in with glass.", "v": true}, "window": {"a": ["centro", "secco"], "w": "Window glass isn't packaging and melts differently, so take it to the isola ecologica or put small pieces in secco.", "v": false}, "drinkglass": {"a": ["secco"], "w": "Drinking glasses and crystal have a different composition from bottle glass, so they go in the indifferenziato.", "v": false}, "mirror": {"a": ["secco", "centro"], "w": "Mirrors are coated flat glass, so they don't go in vetro; small pieces go in secco, large ones to the recycling centre.", "v": false}, "tissue": {"a": ["organico", "secco"], "w": "Most Italian cities accept used paper tissues in the umido because they're compostable; a few ask for secco.", "v": true}, "diaper": {"a": ["secco"], "w": "Nappies can't be recycled with other materials and go in the residual bin, though some towns collect them separately.", "v": false}, "pad": {"a": ["secco"], "w": "Sanitary products are hygiene waste for the indifferenziato bin.", "v": false}, "battery": {"a": ["pile", "centro"], "w": "Batteries go in the collection boxes found in shops and supermarkets, or at the isola ecologica.", "v": false}, "bulb": {"a": ["centro"], "w": "Energy-saving bulbs are RAEE containing mercury; take them to the recycling centre or a shop that sells bulbs.", "v": false}, "meds": {"a": ["farmaci"], "w": "Expired medicines go in the special bins outside pharmacies; the box and leaflet go in carta.", "v": false}, "paint": {"a": ["centro"], "w": "Leftover paint is hazardous waste and must go to the isola ecologica.", "v": false}, "toy": {"a": ["secco", "centro"], "w": "Toys aren't packaging, so Corepla says they don't go in plastica; small ones go in secco, large ones to the recycling centre.", "v": false}}}, "norway": {"name": "Norway", "sub": "National sorting rules (avfallsforskriften ch. 10a) with shared Sortere.no symbols: food, plastic, paper, glass/metal and residual at home, plus recycling station and pharmacy.", "bins": [{"id": "food", "label": "Food waste", "sub": "Matavfall: scraps, bones, grounds", "c": "#3C8A50", "divert": true, "g": "leaf", "pat": "stripes"}, {"id": "plastic", "label": "Plastic", "sub": "Plastemballasje: bottles, bags, film", "c": "#7B3F98", "divert": true, "g": "bottle", "pat": "dots"}, {"id": "paper", "label": "Paper & cartons", "sub": "Papir, kartong, drikkekartong", "c": "#2A6EBB", "divert": true, "g": "paper", "pat": "grid"}, {"id": "glassmetal", "label": "Glass & metal", "sub": "Jars, bottles, tins, cans", "c": "#1F8483", "divert": true, "g": "jar", "pat": "zigzag"}, {"id": "rest", "label": "Residual", "sub": "Restavfall: burned for energy", "c": "#454C55", "divert": false, "g": "flame", "pat": "checks"}, {"id": "station", "label": "Recycling station", "sub": "Hazardous, electrical, flat glass", "c": "#B2413A", "divert": true, "g": "truck", "pat": "waves"}, {"id": "pharmacy", "label": "Pharmacy", "sub": "Apotek: leftover medicines", "c": "#2E9E6A", "divert": true, "g": "cross", "pat": "cross"}], "items": {"banana": {"a": ["food"], "w": "Food scraps become biogas and fertiliser; separate food collection is required nationwide.", "v": false}, "eggshell": {"a": ["food"], "w": "Egg shells are food waste and go with other kitchen scraps.", "v": false}, "coffee": {"a": ["food"], "w": "Coffee grounds and paper filters both go in food waste.", "v": false}, "bones": {"a": ["food"], "w": "Bones are accepted in Norwegian food waste along with meat and fish scraps.", "v": false}, "shampoo": {"a": ["plastic"], "w": "Empty plastic bottles are plastic packaging; a quick squeeze-out is enough, no need to scrub.", "v": false}, "polybag": {"a": ["plastic"], "w": "Carrier bags and soft plastic film count as plastic packaging.", "v": false}, "chips": {"a": ["plastic", "rest"], "w": "Plastic crisp bags go with plastic packaging; bags mixing paper and plastic go in residual waste.", "v": true}, "tube": {"a": ["plastic"], "w": "Squeeze it empty and sort the tube as plastic packaging.", "v": false}, "carton": {"a": ["paper"], "w": "In Norway drink cartons are sorted with paper and cardboard, not with plastic.", "v": false}, "eggtray": {"a": ["paper", "food"], "w": "Sortere.no says paper; some municipalities suggest food waste, where it soaks up moisture.", "v": true}, "box": {"a": ["paper", "station"], "w": "Flatten boxes for the paper bin; take large amounts to the recycling station.", "v": false}, "pizza": {"a": ["paper", "rest"], "w": "Scrape off leftovers; grease stains are fine in paper. Boxes caked in food go in residual.", "v": false}, "newspaper": {"a": ["paper"], "w": "Newspapers are recycled into new paper.", "v": false}, "jar": {"a": ["glassmetal"], "w": "Empty glass jars go in glass and metal packaging; the metal lid can go too.", "v": false}, "wine": {"a": ["glassmetal"], "w": "Wine bottles carry no pant deposit, so they go in glass and metal packaging.", "v": false}, "perfume": {"a": ["glassmetal"], "w": "A glass perfume bottle is packaging, so it goes with glass and metal.", "v": false}, "tin": {"a": ["glassmetal"], "w": "Empty food tins are metal packaging and are recycled with glass.", "v": false}, "window": {"a": ["station"], "w": "Window glass is not packaging, and insulated panes can be hazardous; take it to the recycling station.", "v": false}, "drinkglass": {"a": ["rest", "station"], "w": "Drinking glass has a different make-up from jars; wrap it and put it in residual waste.", "v": false}, "mirror": {"a": ["rest", "station"], "w": "Mirrors are not glass packaging; wrap small pieces for residual, take big ones to the station.", "v": false}, "tissue": {"a": ["rest", "food"], "w": "Used tissues go in residual; paper that wiped up food spills may go in food waste.", "v": true}, "diaper": {"a": ["rest"], "w": "Diapers mix plastic, pulp and waste, so they are burned for energy.", "v": false}, "pad": {"a": ["rest"], "w": "Sanitary products go in residual waste.", "v": false}, "battery": {"a": ["station"], "w": "Batteries are hazardous; return them to shops that sell batteries or to the recycling station.", "v": false}, "bulb": {"a": ["station"], "w": "CFL bulbs contain mercury; hand them in where bulbs are sold or at the recycling station.", "v": false}, "meds": {"a": ["pharmacy"], "w": "Pharmacies take back leftover medicines free of charge so they are destroyed safely.", "v": false}, "paint": {"a": ["station"], "w": "Paint with leftovers is hazardous waste for the recycling station.", "v": false}, "toy": {"a": ["rest", "station"], "w": "A plastic toy is not packaging; small ones go in residual, big ones to the station.", "v": true}}}, "spain": {"name": "Spain", "sub": "Street containers under Ley 7/2022: Ecoembes yellow and blue, Ecovidrio green, brown organic and grey rest, plus punto limpio and SIGRE at pharmacies.", "bins": [{"id": "amarillo", "label": "Yellow", "sub": "Envases: plastic, cans, cartons", "c": "#F2C200", "divert": true, "g": "recycle", "pat": "stripes"}, {"id": "azul", "label": "Blue", "sub": "Papel y cartón", "c": "#1F5FAD", "divert": true, "g": "paper", "pat": "dots"}, {"id": "verde", "label": "Green", "sub": "Vidrio: bottles and jars", "c": "#2E8B3E", "divert": true, "g": "jar", "pat": "grid"}, {"id": "marron", "label": "Brown", "sub": "Orgánico: food, kitchen paper", "c": "#7A4A24", "divert": true, "g": "leaf", "pat": "zigzag"}, {"id": "resto", "label": "Grey", "sub": "Resto: everything else", "c": "#5A5F66", "divert": false, "g": "trash", "pat": "checks"}, {"id": "puntolimpio", "label": "Punto limpio", "sub": "Hazardous, electrical, flat glass", "c": "#B2413A", "divert": true, "g": "truck", "pat": "waves"}, {"id": "sigre", "label": "SIGRE point", "sub": "Pharmacy: medicines", "c": "#2E9E6A", "divert": true, "g": "cross", "pat": "cross"}], "items": {"banana": {"a": ["marron", "resto"], "w": "Peels go in the brown bin for compost; where no brown bin exists yet, use the grey one.", "v": true}, "eggshell": {"a": ["marron", "resto"], "w": "Egg shells are organic waste for the brown bin.", "v": true}, "coffee": {"a": ["marron", "resto"], "w": "Coffee grounds go in the brown bin; plastic or aluminium capsules do not.", "v": true}, "bones": {"a": ["marron", "resto"], "w": "Meat and fish bones are accepted in the brown organic bin.", "v": true}, "shampoo": {"a": ["amarillo"], "w": "Plastic bottles are packaging, so they go in the yellow container.", "v": false}, "polybag": {"a": ["amarillo"], "w": "Plastic carrier bags are packaging and go in the yellow container.", "v": false}, "chips": {"a": ["amarillo"], "w": "Crisp packets, even foil-lined ones, are packaging for the yellow container.", "v": false}, "tube": {"a": ["amarillo"], "w": "Toothpaste tubes are packaging and go in the yellow container.", "v": false}, "carton": {"a": ["amarillo"], "w": "In Spain drink cartons go in yellow, not blue, because they contain plastic and aluminium layers.", "v": false}, "eggtray": {"a": ["azul"], "w": "Moulded cardboard egg boxes go in the blue paper container.", "v": false}, "box": {"a": ["azul"], "w": "Flatten cardboard boxes and put them in the blue container.", "v": false}, "pizza": {"a": ["azul", "resto"], "w": "Ecoembes says grease stains are fine in blue; tear off parts caked in food for the grey bin.", "v": true}, "newspaper": {"a": ["azul"], "w": "Newspapers go in the blue paper container.", "v": false}, "jar": {"a": ["verde"], "w": "Glass jars go in the green igloo; the metal lid goes in yellow.", "v": false}, "wine": {"a": ["verde"], "w": "Glass bottles go in Ecovidrio's green igloo.", "v": false}, "perfume": {"a": ["verde"], "w": "Glass perfume and cologne bottles are packaging, so they go in green without the cap.", "v": false}, "tin": {"a": ["amarillo"], "w": "Food tins and cans are metal packaging for the yellow container.", "v": false}, "window": {"a": ["puntolimpio"], "w": "Window glass melts differently from bottle glass; take it to a punto limpio.", "v": false}, "drinkglass": {"a": ["resto", "puntolimpio"], "w": "Drinking glasses are not packaging and would spoil green-bin glass; wrap and put in grey.", "v": true}, "mirror": {"a": ["puntolimpio", "resto"], "w": "Mirrors have a metal coating and are not packaging; take them to a punto limpio.", "v": true}, "tissue": {"a": ["marron", "resto"], "w": "Many councils accept used paper napkins and tissues in brown; others ask for grey.", "v": true}, "diaper": {"a": ["resto"], "w": "Diapers are not accepted in organic or packaging bins; they go in the grey container.", "v": false}, "pad": {"a": ["resto"], "w": "Sanitary products go in the grey rest container.", "v": false}, "battery": {"a": ["puntolimpio"], "w": "Batteries go to battery collection boxes in shops or to a punto limpio.", "v": false}, "bulb": {"a": ["puntolimpio"], "w": "CFL bulbs contain mercury; return them to the shop or a punto limpio, never the green igloo.", "v": false}, "meds": {"a": ["sigre"], "w": "Take medicines and their boxes to the SIGRE point at any pharmacy.", "v": false}, "paint": {"a": ["puntolimpio"], "w": "Paint is hazardous household waste for the punto limpio.", "v": false}, "toy": {"a": ["resto", "puntolimpio"], "w": "The yellow bin takes packaging only; a plastic toy goes in grey, or big ones to a punto limpio.", "v": false}}}, "sweden": {"name": "Sweden", "sub": "Packaging sorted by material, plus food waste, general waste and the recycling centre.", "bins": [{"id": "plastic", "label": "Plastic", "sub": "Plastic packaging: bottles, bags, film", "c": "#B98A00", "divert": true, "g": "bottle", "pat": "stripes"}, {"id": "paper", "label": "Paper", "sub": "Paper packaging: boxes, cartons", "c": "#8A5A2B", "divert": true, "g": "box", "pat": "dots"}, {"id": "glass", "label": "Glass", "sub": "Glass packaging: bottles, jars", "c": "#1F8483", "divert": true, "g": "jar", "pat": "grid"}, {"id": "metal", "label": "Metal", "sub": "Metal packaging: tins, lids", "c": "#6F7773", "divert": true, "g": "can", "pat": "zigzag"}, {"id": "food", "label": "Food waste", "sub": "Peels, bones, grounds", "c": "#3C8A50", "divert": true, "g": "apple", "pat": "checks"}, {"id": "general", "label": "General waste", "sub": "Burned for energy", "c": "#454C55", "divert": false, "g": "flame", "pat": "waves"}, {"id": "centre", "label": "Recycling centre", "sub": "Hazardous, bulky, non-packaging", "c": "#B2413A", "divert": true, "g": "truck", "pat": "cross"}], "items": {"banana": {"a": ["food"], "w": "Food waste becomes biogas and fertiliser. Use your kommun's paper bag.", "v": false}, "eggshell": {"a": ["food"], "w": "Shells go in food waste along with other kitchen scraps.", "v": false}, "coffee": {"a": ["food"], "w": "Grounds and paper filters both go in food waste.", "v": false}, "bones": {"a": ["food"], "w": "Bones count as food waste and go to biogas.", "v": false}, "shampoo": {"a": ["plastic"], "w": "Rinse it and put the cap back on. It's plastic packaging.", "v": false}, "polybag": {"a": ["plastic"], "w": "Soft plastic bags are plastic packaging here, though many other countries refuse them in recycling.", "v": true}, "chips": {"a": ["plastic"], "w": "Crisp packets are plastic film with a thin metal layer. Plastic packaging.", "v": false}, "tube": {"a": ["plastic"], "w": "Squeeze it empty. Tubes go with plastic packaging, even ones with a metal layer.", "v": true}, "carton": {"a": ["paper"], "w": "Milk cartons go in paper packaging despite the thin plastic layer. Rinse and flatten.", "v": true}, "eggtray": {"a": ["paper", "food"], "w": "Moulded pulp is paper packaging. Some kommuner also take it in food waste.", "v": true}, "box": {"a": ["paper"], "w": "Flatten boxes so they don't fill the container with air.", "v": false}, "pizza": {"a": ["paper"], "w": "Remove leftovers. A greasy box still goes in paper packaging.", "v": true}, "jar": {"a": ["glass"], "w": "Empty and rinse. Put the metal lid in metal packaging.", "v": false}, "wine": {"a": ["glass"], "w": "Glass bottles go in glass packaging. Sort clear and coloured glass if your station splits them.", "v": false}, "perfume": {"a": ["glass"], "w": "Perfume bottles are glass packaging. Remove the pump if you can.", "v": false}, "tin": {"a": ["metal"], "w": "Rinse it. Tins and lids go in metal packaging.", "v": false}, "window": {"a": ["centre"], "w": "Window glass melts at a different temperature from bottles, so one pane can spoil a batch. Take it to the recycling centre.", "v": true}, "drinkglass": {"a": ["general", "centre"], "w": "Drinking glasses aren't packaging glass. Their additives spoil bottle glass. Small amounts go in general waste; more to the recycling centre.", "v": true}, "mirror": {"a": ["centre"], "w": "Mirrors aren't glass packaging. Take them to the recycling centre.", "v": true}, "tissue": {"a": ["food", "general"], "w": "Fibres are too short and soiled to recycle. Many kommuner take them in food waste; others want general waste.", "v": true}, "diaper": {"a": ["general"], "w": "Diapers go in general waste and are burned for energy.", "v": false}, "pad": {"a": ["general"], "w": "Wrap it and put it in general waste. Never flush it.", "v": false}, "battery": {"a": ["centre"], "w": "Use the battery box in a shop or the recycling centre. Batteries in general waste start truck fires.", "v": false}, "bulb": {"a": ["centre"], "w": "CFL bulbs contain mercury. Hand them in at the recycling centre.", "v": false}, "paint": {"a": ["centre"], "w": "Leftover paint is hazardous waste. An empty, dry can could go in metal packaging instead.", "v": false}, "toy": {"a": ["general", "centre"], "w": "The plastic bin is for packaging only. A toy is a product, so it goes to general waste or the recycling centre.", "v": true}}}, "usa": {"name": "USA", "sub": "Typical single-stream curbside Recycling, Trash and (where offered) Compost, plus hazardous-waste drop-off, pharmacy take-back and store drop-off for plastic bags.", "bins": [{"id": "recycling", "label": "Recycling", "sub": "Bottles, cans, paper, cardboard", "c": "#1F5FA8", "divert": true, "g": "recycle", "pat": "stripes"}, {"id": "trash", "label": "Trash", "sub": "Non-recyclables, landfill", "c": "#454C55", "divert": false, "g": "trash", "pat": "dots"}, {"id": "compost", "label": "Compost", "sub": "Food and yard waste, if offered", "c": "#3C8A50", "divert": true, "g": "leaf", "pat": "grid"}, {"id": "hhw", "label": "Hazardous drop-off", "sub": "Batteries, bulbs, paint, chemicals", "c": "#B2413A", "divert": true, "g": "warn", "pat": "zigzag"}, {"id": "takeback", "label": "Drug take-back", "sub": "Pharmacy: unused medicines", "c": "#7A4FA0", "divert": true, "g": "cross", "pat": "checks"}, {"id": "storebag", "label": "Store drop-off", "sub": "Plastic bags and film", "c": "#B98A00", "divert": true, "g": "bag", "pat": "waves"}], "items": {"banana": {"a": ["compost", "trash"], "w": "Food scraps go in a compost cart where your city has one; otherwise they go in the trash.", "v": true}, "eggshell": {"a": ["compost", "trash"], "w": "Egg shells compost well; use the trash if your city has no compost collection.", "v": true}, "coffee": {"a": ["compost", "trash"], "w": "Coffee grounds and paper filters go in compost where it is offered, otherwise in the trash.", "v": true}, "bones": {"a": ["compost", "trash"], "w": "City compost programs usually take bones, but home compost piles don't; without a program, use the trash.", "v": true}, "shampoo": {"a": ["recycling"], "w": "Empty plastic bottles are accepted in almost every curbside recycling program.", "v": false}, "polybag": {"a": ["storebag", "trash"], "w": "Plastic bags jam sorting machines, so keep them out of the recycling cart. Many grocery stores collect them.", "v": true}, "chips": {"a": ["trash"], "w": "Chip bags are made of layered plastic and foil, which most programs cannot recycle.", "v": false}, "tube": {"a": ["trash"], "w": "Most US programs don't accept toothpaste tubes yet, even the ones labelled recyclable.", "v": true}, "carton": {"a": ["recycling"], "w": "Most US households can recycle milk cartons at the curb, but some programs still don't take them.", "v": true}, "eggtray": {"a": ["recycling", "compost"], "w": "Paper egg cartons are usually recycled with paper, or composted where a compost program takes them.", "v": true}, "box": {"a": ["recycling"], "w": "Flatten cardboard boxes and put them in the recycling cart.", "v": false}, "pizza": {"a": ["recycling", "compost", "trash"], "w": "Scrape out the food and recycle the box. Put heavily soiled parts in compost or the trash.", "v": true}, "newspaper": {"a": ["recycling"], "w": "Newspapers are one of the easiest things to recycle.", "v": false}, "jar": {"a": ["recycling"], "w": "Glass jars are recycled in most programs, but some cities want glass taken to a separate drop-off.", "v": true}, "wine": {"a": ["recycling"], "w": "Wine bottles go in recycling; a few cities require glass drop-off, and some states refund a deposit.", "v": true}, "perfume": {"a": ["trash"], "w": "Most programs take only food and drink glass, and the spray pump can't be removed.", "v": true}, "tin": {"a": ["recycling"], "w": "Rinse food cans and put them in the recycling cart.", "v": false}, "window": {"a": ["trash"], "w": "Broken glass can injure sorting workers, and window glass melts differently. Wrap it and put it in the trash.", "v": false}, "drinkglass": {"a": ["trash"], "w": "Drinking glass differs from bottle glass, and broken pieces are a hazard. Wrap them and put them in the trash.", "v": false}, "mirror": {"a": ["trash"], "w": "Mirrors have a coating and can't be recycled; wrap broken pieces and put them in the trash.", "v": false}, "tissue": {"a": ["trash", "compost"], "w": "Used tissues go in the trash; some city compost programs accept them.", "v": true}, "diaper": {"a": ["trash"], "w": "Disposable diapers go in the trash; they are not recyclable or compostable at the curb.", "v": false}, "pad": {"a": ["trash"], "w": "Wrap sanitary pads and put them in the trash; don't flush them.", "v": false}, "battery": {"a": ["hhw", "trash"], "w": "Most places allow alkaline AAs in the trash, but EPA recommends recycling them at a drop-off. Never put them in recycling.", "v": true}, "bulb": {"a": ["hhw"], "w": "CFLs contain mercury, so take them to a hazardous waste drop-off or a hardware store take-back.", "v": true}, "meds": {"a": ["takeback", "trash"], "w": "Use a pharmacy drop box. With no take-back nearby, FDA says seal pills in a bag with coffee grounds and trash them.", "v": false}, "paint": {"a": ["hhw", "trash"], "w": "Take oil-based and leftover paint to a drop-off; in many places dried-out latex paint can go in the trash.", "v": true}, "toy": {"a": ["trash"], "w": "Broken plastic toys aren't accepted in curbside recycling, so they go in the trash.", "v": false}}}}/*END*/;
+
+const $=id=>document.getElementById(id);
+const store={get(k,f){try{const v=localStorage.getItem("ss_"+k);return v?JSON.parse(v):f}catch(e){return f}},set(k,v){try{localStorage.setItem("ss_"+k,JSON.stringify(v))}catch(e){}}};
+const reduced=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
+const wait=ms=>new Promise(r=>setTimeout(r,reduced()?0:ms));
+let S={region:store.get("region","india"),sound:true};
+if(!REGIONS[S.region])S.region="india";
+const R=()=>REGIONS[S.region];
+const ans=it=>(R().items[it.id]||{}).a;
+const why=it=>R().items[it.id].w;
+const varies=it=>R().items[it.id].v;
+const binById=id=>R().bins.find(b=>b.id===id);
+
+/* ---------- audio ---------- */
+let ac=null;
+function tone(f,dur,type="triangle",vol=.12){
+  if(!S.sound)return;
+  try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+    const o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.value=f;
+    g.gain.setValueAtTime(vol,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+dur);
+    o.connect(g).connect(ac.destination);o.start();o.stop(ac.currentTime+dur);}catch(e){}
+}
+$("soundBtn").onclick=()=>{S.sound=!S.sound;$("soundBtn").textContent="Sound: "+(S.sound?"on":"off");$("soundBtn").setAttribute("aria-pressed",S.sound)};
+
+/* ---------- start screen ---------- */
+function renderStart(){
+  const keys=Object.keys(REGIONS).sort((a,b)=>REGIONS[a].name.localeCompare(REGIONS[b].name));
+  $("regionPick").innerHTML=keys.map(k=>{const r=REGIONS[k];return `
+    <button class="country" data-r="${k}" aria-pressed="${S.region===k}">
+      <span class="rn">${r.name}</span><span class="rc">${r.bins.length} bins</span>
+    </button>`}).join("");
+  const r=R();
+  $("preview").innerHTML=`<span class="rn">${r.name}</span><span class="rs">${r.sub}</span>
+      <span class="minis">${r.bins.map(b=>`<span class="mini">${binSvg(b)}${b.label}</span>`).join("")}</span>`;
+  document.querySelectorAll(".country").forEach(b=>b.onclick=()=>{S.region=b.dataset.r;store.set("region",S.region);renderStart();b.blur();document.querySelector(`.country[data-r="${S.region}"]`).focus()});
+}
+function show(id){["start","play","results"].forEach(s=>$(s).hidden=s!==id);$("homeBtn").hidden=id==="start";window.scrollTo(0,0)}
+$("homeBtn").onclick=()=>{show("start");renderStart()};
+
+/* ---------- shift building: fair bag + Leitner boxes ---------- */
+const boxes=()=>store.get("boxes_"+S.region,{});
+const pool=()=>ITEMS.filter(i=>ans(i));
+function weightedPick(list){ // lower Leitner box = more likely
+  const bx=boxes();const ws=list.map(i=>(6-(bx[i.id]||1))**2+Math.random());
+  let t=ws.reduce((a,b)=>a+b,0)*Math.random();
+  for(let j=0;j<list.length;j++){t-=ws[j];if(t<=0)return list[j]}return list[list.length-1];
+}
+function buildShift(){
+  const p=pool(),bins=R().bins.map(b=>b.id),chosen=[];
+  const easyPool=p.filter(i=>i.d===1);const tut=weightedPick(easyPool.length?easyPool:p);chosen.push(tut);
+  const order=bins.slice().sort(()=>Math.random()-.5);let k=0,guard=0;
+  while(chosen.length<10&&guard++<200){
+    const b=order[k++%order.length];
+    const cand=p.filter(i=>ans(i)[0]===b&&!chosen.includes(i));
+    if(cand.length)chosen.push(weightedPick(cand));
+  }
+  const rest=chosen.slice(1).sort(()=>Math.random()-.5);
+  const easy=rest.filter(i=>i.d===1),mid=rest.filter(i=>i.d===2),hard=rest.filter(i=>i.d===3);
+  const out=[...easy.splice(0,Math.max(0,easy.length-hard.length)),...mid];
+  hard.forEach(h=>{out.push(h);if(easy.length)out.push(easy.shift())}); // breather after each hard item
+  return [tut,...out,...easy];
+}
+
+/* ---------- play ---------- */
+let G;
+function startShift(items,mode){
+  G={items,i:0,mode,combo:0,best:0,kg:0,right:0,counted:0,log:[],bales:{},locked:true,ready:false};
+  R().bins.forEach(b=>G.bales[b.id]={n:0,ok:0});
+  show("play");renderBins();renderBales();nextItem();
+}
+function renderBins(){
+  const nb=R().bins.length;$("bins").style.setProperty("--n",nb);$("bins").style.setProperty("--mcols",nb>8?5:4);
+  $("bins").innerHTML=R().bins.map((b,j)=>`
+    <button class="bin" id="bin-${b.id}" data-b="${b.id}" style="--c:${b.c}" aria-label="${j+1}: ${b.label}. ${b.sub}">
+      ${binSvg(b)}<span class="key" aria-hidden="true">${j+1}</span>
+      <span class="lb">${b.label}</span><span class="sb">${b.sub}</span>
+    </button>`).join("");
+  document.querySelectorAll(".bin").forEach(el=>el.onclick=()=>choose(el.dataset.b));
+  $("how").textContent=`Drag · tap · keys 1–${R().bins.length}`;
+  requestAnimationFrame(sizeDock);
+}
+function sizeDock(){
+  const d=$("dock");const fixed=getComputedStyle(d).position==="fixed";
+  document.documentElement.style.setProperty("--dockh",fixed?d.offsetHeight+12+"px":"0px");
+}
+addEventListener("resize",sizeDock);
+function renderBales(flashId){
+  $("bales").innerHTML=R().bins.map(b=>{
+    const x=G.bales[b.id],pure=x.n?Math.round(x.ok/x.n*100):null;
+    return `<div class="bale${flashId===b.id?" flash":""}" style="--c:${b.c}"><div class="row"><span>${b.label}</span><span>${x.n?x.n+" · "+pure+"% pure":"empty"}</span></div>
+      <div class="meter" role="img" aria-label="${pure===null?"empty":pure+"% pure"}"><span class="p" style="width:${x.ok*10}%"></span><span class="x" style="width:${(x.n-x.ok)*10}%"></span></div></div>`}).join("");
+}
+function hud(){
+  $("hItem").textContent=`${Math.min(G.i+1,G.items.length)} / ${G.items.length}`;
+  $("hCombo").textContent="×"+G.combo;
+  $("hKg").textContent=G.kg.toFixed(2)+" kg";
+  $("hAcc").textContent=G.counted?Math.round(G.right/G.counted*100)+"%":"–";
+  $("ticks").innerHTML=G.items.map((_,j)=>`<i class="${j<G.log.length?(G.log[j].ok?"ok":"no"):j===G.i?"now":""}"></i>`).join("");
+}
+const isTut=()=>G.mode==="shift"&&G.i===0;
+function nextItem(){
+  if(G.i>=G.items.length)return finish();
+  const it=G.items[G.i];
+  document.querySelectorAll(".bin").forEach(b=>{b.className="bin";b.disabled=false});
+  $("whySlot").innerHTML="";
+  $("cue").textContent=isTut()?"Training: the lit bin is right":G.mode==="review"?"Review: no hints":"Sort it!";
+  const p=$("parcel");p.style.visibility="";p.style.transform="";p.className="parcel";void p.offsetWidth;p.className="parcel enter";
+  p.setAttribute("aria-label",it.n+(varies(it)?", rules vary locally":""));
+  p.innerHTML=`${ART[it.id]}<span class="nm">${it.n}</span>
+    <span class="meta"><span>${it.kg.toFixed(2)} kg</span>${varies(it)?'<span class="varies">varies locally</span>':""}</span>`;
+  if(isTut())$("bin-"+ans(it)[0]).classList.add("hint");
+  G.locked=false;G.ready=false;hud();
+}
+
+/* ---------- drag and drop ---------- */
+let drag=null;
+function binAt(x,y){
+  for(const el of document.querySelectorAll(".bin")){const r=el.getBoundingClientRect();
+    if(x>=r.left-8&&x<=r.right+8&&y>=r.top-24&&y<=r.bottom+8)return el}
+  return null;
+}
+const parcel=$("parcel");
+parcel.addEventListener("pointerdown",e=>{
+  if(!G||G.locked)return;
+  drag={x:e.clientX,y:e.clientY,moved:false,over:null};
+  parcel.setPointerCapture(e.pointerId);
+});
+parcel.addEventListener("pointermove",e=>{
+  if(!drag)return;
+  const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+  if(!drag.moved&&Math.hypot(dx,dy)<6)return;
+  drag.moved=true;parcel.classList.remove("enter");parcel.classList.add("dragging");
+  parcel.style.transform=`translate(${dx}px,${dy}px) rotate(${Math.max(-12,Math.min(12,dx/18))}deg) scale(.9)`;
+  const b=binAt(e.clientX,e.clientY);
+  if(b!==drag.over){drag.over&&drag.over.classList.remove("open");b&&b.classList.add("open");drag.over=b}
+});
+function endDrag(){
+  if(!drag)return;const d=drag;drag=null;parcel.classList.remove("dragging");
+  if(d.moved&&d.over&&!G.locked){choose(d.over.dataset.b)}
+  else{parcel.style.transition="transform .25s";parcel.style.transform="";setTimeout(()=>parcel.style.transition="",260);d.over&&d.over.classList.remove("open")}
+}
+parcel.addEventListener("pointerup",endDrag);
+parcel.addEventListener("pointercancel",endDrag);
+
+/* ---------- flight: the item arcs into a bin ---------- */
+function fly(id,fromRect,toEl,hop){
+  toEl.classList.add("open");
+  if(reduced())return Promise.resolve().then(()=>toEl.classList.remove("open"));
+  const el=document.createElement("div");el.className="flyer";el.innerHTML=ART[id];
+  const sx=fromRect.left+fromRect.width/2-36,sy=fromRect.top+fromRect.height/2-36;
+  el.style.left=sx+"px";el.style.top=sy+"px";document.body.appendChild(el);
+  const tr=toEl.querySelector(".binart").getBoundingClientRect();
+  const tx=tr.left+tr.width/2-36-sx,ty=tr.top+tr.height*.3-36-sy,spin=tx>=0?1:-1,peak=hop?-120:-50;
+  const a=el.animate([
+    {transform:"translate(0,0) scale(1) rotate(0)"},
+    {transform:`translate(${tx*.5}px,${ty*.5+peak}px) scale(.8) rotate(${spin*90}deg)`,offset:.5},
+    {transform:`translate(${tx}px,${ty}px) scale(.3) rotate(${spin*180}deg)`}
+  ],{duration:hop?560:360,easing:"cubic-bezier(.35,.1,.55,1)",fill:"forwards"});
+  return a.finished.then(()=>{el.remove();setTimeout(()=>toEl.classList.remove("open"),120)});
+}
+function burst(el){
+  if(reduced())return;
+  for(let j=0;j<12;j++){const s=document.createElement("span");s.className="spark";
+    const a=Math.random()*Math.PI*2,r=40+Math.random()*50;
+    s.style.setProperty("--dx",Math.cos(a)*r+"px");s.style.setProperty("--dy",Math.sin(a)*r-30+"px");
+    s.style.background=j%2?"var(--amber)":"var(--c)";el.appendChild(s);setTimeout(()=>s.remove(),650)}
+}
+
+/* ---------- a sort ---------- */
+async function choose(bid){
+  if(G.locked)return;G.locked=true;
+  const it=G.items[G.i],acc=ans(it),ok=acc.includes(bid),bin=binById(bid),tut=isTut();
+  const el=$("bin-"+bid);
+  document.querySelectorAll(".bin").forEach(b=>{b.disabled=true;b.classList.remove("hint")});
+  const from=parcel.getBoundingClientRect();
+  parcel.style.visibility="hidden";
+  await fly(it.id,from,el,false);
+
+  G.bales[bid].n++;if(ok)G.bales[bid].ok++;
+  if(!tut){G.counted++;const bx=boxes();bx[it.id]=ok?Math.min(5,(bx[it.id]||1)+1):1;store.set("boxes_"+S.region,bx)}
+  G.log.push({it,bid,ok,tut});
+  if(ok){
+    if(!tut)G.right++;G.combo++;G.best=Math.max(G.best,G.combo);
+    if(bin.divert)G.kg+=it.kg;
+    el.classList.add("right","pop");burst(el);
+    const f=392*Math.pow(1.06,Math.min(G.combo,12));tone(f,.16);setTimeout(()=>tone(f*1.34,.16),70);
+    renderBales();hud();
+  }else{
+    // lands in the wrong bin, dirties the bale, then hops to the right one
+    G.combo=0;el.classList.add("wrong","shake","dirty");tone(150,.25,"sine",.18);
+    renderBales(bid);hud();
+    await wait(420);
+    const target=$("bin-"+acc[0]);
+    await fly(it.id,el.querySelector(".binart").getBoundingClientRect(),target,true);
+    acc.forEach(a=>$("bin-"+a).classList.add("right"));target.classList.add("pop");tone(330,.14);
+  }
+  const names=acc.map(a=>binById(a).label).join(" or ");
+  $("whySlot").innerHTML=`<div class="why ${ok?"good":"bad"}" role="status">
+    <span class="mark">${ok?"✓ Correct":"✗ Not quite"}</span>
+    <p><b>${ok?(acc.length>1?"Accepted: "+names:bin.label):"Goes in: "+names}${tut&&!ok?" (training round, not counted)":""}</b>${why(it)}</p>
+    <button class="btn" id="nextBtn">${G.i===G.items.length-1?"End shift":"Next item"}</button></div>`;
+  $("nextBtn").onclick=advance;$("nextBtn").focus({preventScroll:true});
+  G.ready=true;
+}
+function advance(){if(!G.ready)return;G.ready=false;G.i++;nextItem()}
+document.addEventListener("keydown",e=>{
+  if($("play").hidden||!G)return;
+  if(!G.locked&&/^[1-9]$/.test(e.key)){const b=R().bins[+e.key-1];if(b){e.preventDefault();choose(b.id)}}
+  else if(G.ready&&(e.key==="Enter"||e.key===" ")&&document.activeElement.id!=="nextBtn"){e.preventDefault();advance()}
+});
+
+/* ---------- results ---------- */
+function finish(){
+  const acc=G.counted?Math.round(G.right/G.counted*100):0;
+  const bestKey="best_"+S.region,best=store.get(bestKey,{acc:0,kg:0,combo:0});
+  const newBest=G.mode==="shift"&&G.counted>0&&(acc>best.acc||(acc===best.acc&&G.kg>best.kg));
+  if(G.mode==="shift")store.set(bestKey,{acc:Math.max(acc,best.acc),kg:Math.max(G.kg,best.kg),combo:Math.max(G.best,best.combo)});
+  const misses=G.log.filter(l=>!l.ok);
+  const used=R().bins.filter(b=>G.bales[b.id].n);
+  const pure=used.map(b=>`${b.label} ${Math.round(G.bales[b.id].ok/G.bales[b.id].n*100)}%`).join(" · ");
+  $("results").innerHTML=`
+    <div><h2>${G.mode==="review"?"Review done":"Shift complete"}${newBest?" · New personal best":""}</h2>
+    <p class="lede">${R().name} rules. Bale purity: ${pure||"no bales"}.</p></div>
+    <div class="stats">
+      <div><div class="v">${acc}%</div><div class="k">Accuracy${G.mode==="shift"?" (excl. training)":""}</div></div>
+      <div><div class="v">${G.kg.toFixed(2)}</div><div class="k">kg kept from landfill</div></div>
+      <div><div class="v">×${G.best}</div><div class="k">Best combo</div></div>
+      <div><div class="v">${Math.max(acc,best.acc)}%</div><div class="k">Personal best</div></div>
+    </div>
+    ${misses.length?`<div class="misses"><h2>Items to revisit</h2>${misses.map(m=>{
+      const ans=ans(m.it).map(a=>binById(a).label).join(" or ");
+      return `<div class="miss">${ART[m.it.id]}<div><p><b>${m.it.n}</b></p>
+        <p class="ans">You chose ${binById(m.bid).label} → goes in ${ans}</p><p>${why(m.it)}</p></div></div>`}).join("")}</div>`
+      :`<p class="lede">Clean shift. Every bale is pure.</p>`}
+    <div class="actions">
+      ${misses.length?'<button class="btn amber" id="reviewBtn">Review mistakes</button>':""}
+      <button class="btn${misses.length?" ghost":" amber"}" id="againBtn">New shift</button>
+    </div>`;
+  show("results");
+  if(misses.length)$("reviewBtn").onclick=()=>startShift([...new Set(misses.map(m=>m.it))].sort(()=>Math.random()-.5),"review");
+  $("againBtn").onclick=()=>startShift(buildShift(),"shift");
+}
+
+$("startBtn").onclick=()=>startShift(buildShift(),"shift");
+renderStart();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+{
+  "name": "France",
+  "sub": "Citeo's harmonised national sorting rules (Triman / Info-tri): all packaging and paper in the yellow bin since 2023, glass banks, and mandatory food-waste sorting since January 2024.",
+  "bins": [
+    {"id": "yellow", "label": "Yellow bin (emballages & papiers)", "sub": "All packaging and paper", "colour": "#F2C500", "divert": true},
+    {"id": "glass", "label": "Glass bank (verre)", "sub": "Glass bottles, jars and pots", "colour": "#2E8B57", "divert": true},
+    {"id": "bio", "label": "Brown bin / compost (biodéchets)", "sub": "Food scraps and coffee grounds", "colour": "#7B4A2D", "divert": true},
+    {"id": "residual", "label": "Grey bin (ordures ménagères)", "sub": "Everything that can't be sorted", "colour": "#5A5A5A", "divert": false},
+    {"id": "store", "label": "Shop drop-off box (piles & ampoules)", "sub": "Batteries and energy-saving bulbs", "colour": "#1F6FB2", "divert": true},
+    {"id": "pharmacy", "label": "Pharmacy (Cyclamed)", "sub": "Unused or expired medicines", "colour": "#1FA34A", "divert": true},
+    {"id": "dechetterie", "label": "Recycling centre (déchèterie)", "sub": "Paint, flat glass, bulky items", "colour": "#E07B00", "divert": true}
+  ],
+  "items": {
+    "banana": {"a": ["bio"], "w": "Fruit peel is food waste, and since 2024 every household must sort it out via a brown bin or compost.", "v": false},
+    "eggshell": {"a": ["bio"], "w": "Egg shells break down in compost and are accepted by food-waste collections.", "v": false},
+    "coffee": {"a": ["bio"], "w": "Coffee grounds are ideal compost material; paper filters can go in with them.", "v": false},
+    "bones": {"a": ["bio", "residual"], "w": "Most municipal food-waste bins take meat scraps and bones, but home compost can't break them down, so there they go in the grey bin.", "v": true},
+    "shampoo": {"a": ["yellow"], "w": "Plastic bottles are packaging; empty it and put it in the yellow bin with the cap on.", "v": false},
+    "polybag": {"a": ["yellow"], "w": "Since the extended sorting rules, all plastic packaging including bags and films goes in the yellow bin.", "v": false},
+    "chips": {"a": ["yellow"], "w": "Crisp packets are packaging, so under the extended rules they go in the yellow bin.", "v": false},
+    "tube": {"a": ["yellow"], "w": "Toothpaste tubes are packaging; the national rules accept them in the yellow bin, no need to clean.", "v": false},
+    "carton": {"a": ["yellow"], "w": "Drink cartons are recycled for their paper fibres and go in the yellow bin, emptied and flattened.", "v": false},
+    "eggtray": {"a": ["yellow", "bio"], "w": "It's cardboard packaging for the yellow bin; moulded pulp can also be composted.", "v": false},
+    "box": {"a": ["yellow", "dechetterie"], "w": "Flattened cardboard goes in the yellow bin; very large boxes go to the recycling centre.", "v": false},
+    "pizza": {"a": ["yellow", "residual"], "w": "Emptied pizza boxes go in the yellow bin, but some areas ask for greasy or food-soaked parts to go in the grey bin.", "v": true},
+    "newspaper": {"a": ["yellow"], "w": "All paper goes in the yellow bin in most areas, though some towns still have a separate paper bank.", "v": true},
+    "jar": {"a": ["glass"], "w": "Glass jars are packaging glass; put them in the bottle bank and the metal lid in the yellow bin.", "v": false},
+    "wine": {"a": ["glass"], "w": "Glass bottles go in the glass bank and are recycled into new bottles endlessly.", "v": false},
+    "perfume": {"a": ["glass"], "w": "A glass perfume bottle is packaging glass, so it goes in the glass bank.", "v": false},
+    "tin": {"a": ["yellow"], "w": "Steel and aluminium food tins go in the yellow bin; metal is sorted out magnetically and recycled.", "v": false},
+    "window": {"a": ["dechetterie"], "w": "Window glass melts at a different temperature from bottle glass, so take it to the recycling centre, not the glass bank.", "v": false},
+    "drinkglass": {"a": ["residual"], "w": "Drinking glasses have a different composition from bottle glass and would spoil a recycling batch, so wrap it and bin it.", "v": false},
+    "mirror": {"a": ["dechetterie", "residual"], "w": "Mirror glass is coated and can't go in the glass bank; take it to the recycling centre or wrap small pieces for the grey bin.", "v": false},
+    "tissue": {"a": ["residual", "bio"], "w": "Used tissues can't be recycled; they go in the grey bin, though many food-waste collections also accept them.", "v": true},
+    "diaper": {"a": ["residual"], "w": "Nappies mix plastic, pulp and waste, so they can't be recycled and go in the grey bin.", "v": false},
+    "pad": {"a": ["residual"], "w": "Sanitary products are hygiene waste and go in the grey bin, never the toilet.", "v": false},
+    "battery": {"a": ["store", "dechetterie"], "w": "Batteries contain metals that can be recovered; every shop selling them has a free drop-off box.", "v": false},
+    "bulb": {"a": ["store", "dechetterie"], "w": "Energy-saving bulbs contain a little mercury, so take them to a shop collection box or recycling centre.", "v": false},
+    "meds": {"a": ["pharmacy"], "w": "Take unused medicines to any pharmacy for safe destruction; the empty cardboard box goes in the yellow bin.", "v": false},
+    "paint": {"a": ["dechetterie"], "w": "Leftover paint is hazardous waste and goes to the recycling centre or a paint-shop take-back point.", "v": false},
+    "toy": {"a": ["residual", "dechetterie"], "w": "Toys aren't packaging, so they don't go in the yellow bin; small broken toys go in the grey bin, larger ones to the recycling centre.", "v": true}
+  },
+  "sources": [
+    "https://www.citeo.com/le-mag/les-consignes-de-tri-evoluent",
+    "https://citoyens.citeo.com/on-ne-lache-rien/",
+    "https://www.triercestfacile.fr/",
+    "https://quefairedemesdechets.ademe.fr/categories/emballages/emballages-en-verre/",
+    "https://www.ecologie.gouv.fr/politiques-publiques/biodechets",
+    "https://www.cyclamed.org/",
+    "https://www.ecosystem.eco/",
+    "https://www.batribox.fr/"
+  ]
+}

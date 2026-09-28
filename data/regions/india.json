@@ -1,0 +1,232 @@
+{
+ "name": "India",
+ "sub": "Solid Waste Management Rules 2026: four streams, mandatory since 1 April 2026.",
+ "bins": [
+  {
+   "id": "wet",
+   "label": "Wet",
+   "sub": "Food and garden waste",
+   "colour": "#3C8A50",
+   "divert": true
+  },
+  {
+   "id": "dry",
+   "label": "Dry",
+   "sub": "Plastic, paper, cartons, glass, metal",
+   "colour": "#2D66AE",
+   "divert": true
+  },
+  {
+   "id": "sanitary",
+   "label": "Sanitary",
+   "sub": "Tissues, pads, diapers",
+   "colour": "#B2413A",
+   "divert": false
+  },
+  {
+   "id": "special",
+   "label": "Special care",
+   "sub": "Broken glass, batteries, bulbs, medicines",
+   "colour": "#454C55",
+   "divert": true
+  }
+ ],
+ "items": {
+  "banana": {
+   "a": [
+    "wet"
+   ],
+   "w": "Food scraps compost. Keeping them out of dry waste keeps paper and plastic clean.",
+   "v": false
+  },
+  "eggshell": {
+   "a": [
+    "wet"
+   ],
+   "w": "Shells are food waste and break down with the rest of the wet stream.",
+   "v": false
+  },
+  "coffee": {
+   "a": [
+    "wet"
+   ],
+   "w": "Grounds are rich compost material, so they belong with wet waste.",
+   "v": false
+  },
+  "bones": {
+   "a": [
+    "wet"
+   ],
+   "w": "Bones are food waste, even though they break down slowly.",
+   "v": false
+  },
+  "shampoo": {
+   "a": [
+    "dry"
+   ],
+   "w": "Empty, rinsed plastic bottles are dry waste.",
+   "v": false
+  },
+  "polybag": {
+   "a": [
+    "dry"
+   ],
+   "w": "Clean, dry polybags are dry waste. Food-soiled plastic contaminates the dry load.",
+   "v": true
+  },
+  "chips": {
+   "a": [
+    "dry"
+   ],
+   "w": "It looks like foil but it's mostly plastic film. Dry waste.",
+   "v": false
+  },
+  "tube": {
+   "a": [
+    "dry"
+   ],
+   "w": "Squeeze it empty. The tube is dry waste.",
+   "v": false
+  },
+  "carton": {
+   "a": [
+    "dry"
+   ],
+   "w": "Cartons are about 70% paperboard with plastic and aluminium layers. Rinse, flatten, dry waste.",
+   "v": true
+  },
+  "eggtray": {
+   "a": [
+    "dry"
+   ],
+   "w": "Moulded pulp is paper, so it's dry waste.",
+   "v": false
+  },
+  "box": {
+   "a": [
+    "dry"
+   ],
+   "w": "Flatten boxes before they go in with dry waste.",
+   "v": false
+  },
+  "pizza": {
+   "a": [
+    "dry"
+   ],
+   "w": "Scrape off the food first. A little grease is fine; cheese-covered parts go in wet waste.",
+   "v": true
+  },
+  "newspaper": {
+   "a": [
+    "dry"
+   ],
+   "w": "Clean paper is dry waste and one of the most valuable recyclables.",
+   "v": false
+  },
+  "jar": {
+   "a": [
+    "dry"
+   ],
+   "w": "Whole glass jars are dry waste. Keep them whole; broken glass is special care.",
+   "v": false
+  },
+  "wine": {
+   "a": [
+    "dry"
+   ],
+   "w": "Whole glass bottles are dry waste.",
+   "v": false
+  },
+  "perfume": {
+   "a": [
+    "dry"
+   ],
+   "w": "It's glass packaging, so it's dry waste. UK surveys find this is the most-missed recyclable.",
+   "v": false
+  },
+  "tin": {
+   "a": [
+    "dry"
+   ],
+   "w": "Rinsed metal tins are dry waste.",
+   "v": false
+  },
+  "window": {
+   "a": [
+    "special"
+   ],
+   "w": "Broken glass is special care under the 2026 rules. It injures waste workers and needs separate handling.",
+   "v": false
+  },
+  "drinkglass": {
+   "a": [
+    "special"
+   ],
+   "w": "Broken glass of any kind is special care.",
+   "v": false
+  },
+  "mirror": {
+   "a": [
+    "special"
+   ],
+   "w": "Broken glass is special care, and the mirror coating makes it worse for glass recycling.",
+   "v": false
+  },
+  "tissue": {
+   "a": [
+    "sanitary"
+   ],
+   "w": "Used tissues are sanitary waste. Wrap them so workers don't handle them.",
+   "v": false
+  },
+  "diaper": {
+   "a": [
+    "sanitary"
+   ],
+   "w": "Diapers are sanitary waste. Wrap them before disposal.",
+   "v": false
+  },
+  "pad": {
+   "a": [
+    "sanitary"
+   ],
+   "w": "Wrap it in paper and put it in sanitary waste.",
+   "v": false
+  },
+  "battery": {
+   "a": [
+    "special"
+   ],
+   "w": "Batteries contain toxic metals and can start fires. Special care.",
+   "v": false
+  },
+  "bulb": {
+   "a": [
+    "special"
+   ],
+   "w": "CFL bulbs contain mercury, so they're special care.",
+   "v": false
+  },
+  "meds": {
+   "a": [
+    "special"
+   ],
+   "w": "Medicines are special care. Never flush them.",
+   "v": false
+  },
+  "paint": {
+   "a": [
+    "special"
+   ],
+   "w": "Leftover paint is special care. It pollutes water if dumped.",
+   "v": false
+  },
+  "toy": {
+   "a": [
+    "dry"
+   ],
+   "w": "Clean plastic items go with dry waste.",
+   "v": false
+  }
+ }
+}
