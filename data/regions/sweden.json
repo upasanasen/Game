@@ -1,0 +1,253 @@
+{
+ "name": "Sweden",
+ "sub": "Packaging sorted by material, plus food waste, general waste and the recycling centre.",
+ "bins": [
+  {
+   "id": "plastic",
+   "label": "Plastic packaging",
+   "sub": "Bottles, bags, tubes, film",
+   "colour": "#B98A00",
+   "divert": true
+  },
+  {
+   "id": "paper",
+   "label": "Paper packaging",
+   "sub": "Boxes, cartons, egg trays",
+   "colour": "#8A5A2B",
+   "divert": true
+  },
+  {
+   "id": "glass",
+   "label": "Glass packaging",
+   "sub": "Bottles and jars only",
+   "colour": "#1F8483",
+   "divert": true
+  },
+  {
+   "id": "metal",
+   "label": "Metal packaging",
+   "sub": "Tins, lids, foil trays",
+   "colour": "#6F7773",
+   "divert": true
+  },
+  {
+   "id": "food",
+   "label": "Food waste",
+   "sub": "Peels, bones, grounds",
+   "colour": "#3C8A50",
+   "divert": true
+  },
+  {
+   "id": "general",
+   "label": "General waste",
+   "sub": "Burned for energy",
+   "colour": "#454C55",
+   "divert": false
+  },
+  {
+   "id": "centre",
+   "label": "Recycling centre",
+   "sub": "Hazardous, bulky, non-packaging",
+   "colour": "#B2413A",
+   "divert": true
+  }
+ ],
+ "items": {
+  "banana": {
+   "a": [
+    "food"
+   ],
+   "w": "Food waste becomes biogas and fertiliser. Use your kommun's paper bag.",
+   "v": false
+  },
+  "eggshell": {
+   "a": [
+    "food"
+   ],
+   "w": "Shells go in food waste along with other kitchen scraps.",
+   "v": false
+  },
+  "coffee": {
+   "a": [
+    "food"
+   ],
+   "w": "Grounds and paper filters both go in food waste.",
+   "v": false
+  },
+  "bones": {
+   "a": [
+    "food"
+   ],
+   "w": "Bones count as food waste and go to biogas.",
+   "v": false
+  },
+  "shampoo": {
+   "a": [
+    "plastic"
+   ],
+   "w": "Rinse it and put the cap back on. It's plastic packaging.",
+   "v": false
+  },
+  "polybag": {
+   "a": [
+    "plastic"
+   ],
+   "w": "Soft plastic bags are plastic packaging here, though many other countries refuse them in recycling.",
+   "v": true
+  },
+  "chips": {
+   "a": [
+    "plastic"
+   ],
+   "w": "Crisp packets are plastic film with a thin metal layer. Plastic packaging.",
+   "v": false
+  },
+  "tube": {
+   "a": [
+    "plastic"
+   ],
+   "w": "Squeeze it empty. Tubes go with plastic packaging, even ones with a metal layer.",
+   "v": true
+  },
+  "carton": {
+   "a": [
+    "paper"
+   ],
+   "w": "Milk cartons go in paper packaging despite the thin plastic layer. Rinse and flatten.",
+   "v": true
+  },
+  "eggtray": {
+   "a": [
+    "paper",
+    "food"
+   ],
+   "w": "Moulded pulp is paper packaging. Some kommuner also take it in food waste.",
+   "v": true
+  },
+  "box": {
+   "a": [
+    "paper"
+   ],
+   "w": "Flatten boxes so they don't fill the container with air.",
+   "v": false
+  },
+  "pizza": {
+   "a": [
+    "paper"
+   ],
+   "w": "Remove leftovers. A greasy box still goes in paper packaging.",
+   "v": true
+  },
+  "newspaper": {
+   "a": null,
+   "w": "",
+   "v": false
+  },
+  "jar": {
+   "a": [
+    "glass"
+   ],
+   "w": "Empty and rinse. Put the metal lid in metal packaging.",
+   "v": false
+  },
+  "wine": {
+   "a": [
+    "glass"
+   ],
+   "w": "Glass bottles go in glass packaging. Sort clear and coloured glass if your station splits them.",
+   "v": false
+  },
+  "perfume": {
+   "a": [
+    "glass"
+   ],
+   "w": "Perfume bottles are glass packaging. Remove the pump if you can.",
+   "v": false
+  },
+  "tin": {
+   "a": [
+    "metal"
+   ],
+   "w": "Rinse it. Tins and lids go in metal packaging.",
+   "v": false
+  },
+  "window": {
+   "a": [
+    "centre"
+   ],
+   "w": "Window glass melts at a different temperature from bottles, so one pane can spoil a batch. Take it to the recycling centre.",
+   "v": true
+  },
+  "drinkglass": {
+   "a": [
+    "general",
+    "centre"
+   ],
+   "w": "Drinking glasses aren't packaging glass. Their additives spoil bottle glass. Small amounts go in general waste; more to the recycling centre.",
+   "v": true
+  },
+  "mirror": {
+   "a": [
+    "centre"
+   ],
+   "w": "Mirrors aren't glass packaging. Take them to the recycling centre.",
+   "v": true
+  },
+  "tissue": {
+   "a": [
+    "food",
+    "general"
+   ],
+   "w": "Fibres are too short and soiled to recycle. Many kommuner take them in food waste; others want general waste.",
+   "v": true
+  },
+  "diaper": {
+   "a": [
+    "general"
+   ],
+   "w": "Diapers go in general waste and are burned for energy.",
+   "v": false
+  },
+  "pad": {
+   "a": [
+    "general"
+   ],
+   "w": "Wrap it and put it in general waste. Never flush it.",
+   "v": false
+  },
+  "battery": {
+   "a": [
+    "centre"
+   ],
+   "w": "Use the battery box in a shop or the recycling centre. Batteries in general waste start truck fires.",
+   "v": false
+  },
+  "bulb": {
+   "a": [
+    "centre"
+   ],
+   "w": "CFL bulbs contain mercury. Hand them in at the recycling centre.",
+   "v": false
+  },
+  "meds": {
+   "a": null,
+   "w": "",
+   "v": false
+  },
+  "paint": {
+   "a": [
+    "centre"
+   ],
+   "w": "Leftover paint is hazardous waste. An empty, dry can could go in metal packaging instead.",
+   "v": false
+  },
+  "toy": {
+   "a": [
+    "general",
+    "centre"
+   ],
+   "w": "The plastic bin is for packaging only. A toy is a product, so it goes to general waste or the recycling centre.",
+   "v": true
+  }
+ }
+}

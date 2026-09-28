@@ -1,0 +1,274 @@
+{
+ "name": "Spain",
+ "sub": "Street containers under Ley 7/2022: Ecoembes yellow and blue, Ecovidrio green, brown organic and grey rest, plus punto limpio and SIGRE at pharmacies.",
+ "bins": [
+  {
+   "id": "amarillo",
+   "label": "Yellow container (envases)",
+   "sub": "Plastic packaging, cans, cartons",
+   "colour": "#F2C200",
+   "divert": true
+  },
+  {
+   "id": "azul",
+   "label": "Blue container (papel y cartón)",
+   "sub": "Paper and cardboard",
+   "colour": "#1F5FAD",
+   "divert": true
+  },
+  {
+   "id": "verde",
+   "label": "Green igloo (vidrio)",
+   "sub": "Glass bottles and jars",
+   "colour": "#2E8B3E",
+   "divert": true
+  },
+  {
+   "id": "marron",
+   "label": "Brown container (orgánico)",
+   "sub": "Food scraps, used kitchen paper",
+   "colour": "#7A4A24",
+   "divert": true
+  },
+  {
+   "id": "resto",
+   "label": "Grey container (resto)",
+   "sub": "Everything else, landfilled or burned",
+   "colour": "#5A5F66",
+   "divert": false
+  },
+  {
+   "id": "puntolimpio",
+   "label": "Punto limpio",
+   "sub": "Hazardous, electrical, flat glass",
+   "colour": "#B2413A",
+   "divert": true
+  },
+  {
+   "id": "sigre",
+   "label": "SIGRE point (pharmacy)",
+   "sub": "Medicines and their packaging",
+   "colour": "#2E9E6A",
+   "divert": true
+  }
+ ],
+ "items": {
+  "banana": {
+   "a": [
+    "marron",
+    "resto"
+   ],
+   "w": "Peels go in the brown bin for compost; where no brown bin exists yet, use the grey one.",
+   "v": true
+  },
+  "eggshell": {
+   "a": [
+    "marron",
+    "resto"
+   ],
+   "w": "Egg shells are organic waste for the brown bin.",
+   "v": true
+  },
+  "coffee": {
+   "a": [
+    "marron",
+    "resto"
+   ],
+   "w": "Coffee grounds go in the brown bin; plastic or aluminium capsules do not.",
+   "v": true
+  },
+  "bones": {
+   "a": [
+    "marron",
+    "resto"
+   ],
+   "w": "Meat and fish bones are accepted in the brown organic bin.",
+   "v": true
+  },
+  "shampoo": {
+   "a": [
+    "amarillo"
+   ],
+   "w": "Plastic bottles are packaging, so they go in the yellow container.",
+   "v": false
+  },
+  "polybag": {
+   "a": [
+    "amarillo"
+   ],
+   "w": "Plastic carrier bags are packaging and go in the yellow container.",
+   "v": false
+  },
+  "chips": {
+   "a": [
+    "amarillo"
+   ],
+   "w": "Crisp packets, even foil-lined ones, are packaging for the yellow container.",
+   "v": false
+  },
+  "tube": {
+   "a": [
+    "amarillo"
+   ],
+   "w": "Toothpaste tubes are packaging and go in the yellow container.",
+   "v": false
+  },
+  "carton": {
+   "a": [
+    "amarillo"
+   ],
+   "w": "In Spain drink cartons go in yellow, not blue, because they contain plastic and aluminium layers.",
+   "v": false
+  },
+  "eggtray": {
+   "a": [
+    "azul"
+   ],
+   "w": "Moulded cardboard egg boxes go in the blue paper container.",
+   "v": false
+  },
+  "pizza": {
+   "a": [
+    "azul",
+    "resto"
+   ],
+   "w": "Ecoembes says grease stains are fine in blue; tear off parts caked in food for the grey bin.",
+   "v": true
+  },
+  "box": {
+   "a": [
+    "azul"
+   ],
+   "w": "Flatten cardboard boxes and put them in the blue container.",
+   "v": false
+  },
+  "newspaper": {
+   "a": [
+    "azul"
+   ],
+   "w": "Newspapers go in the blue paper container.",
+   "v": false
+  },
+  "jar": {
+   "a": [
+    "verde"
+   ],
+   "w": "Glass jars go in the green igloo; the metal lid goes in yellow.",
+   "v": false
+  },
+  "wine": {
+   "a": [
+    "verde"
+   ],
+   "w": "Glass bottles go in Ecovidrio's green igloo.",
+   "v": false
+  },
+  "perfume": {
+   "a": [
+    "verde"
+   ],
+   "w": "Glass perfume and cologne bottles are packaging, so they go in green without the cap.",
+   "v": false
+  },
+  "tin": {
+   "a": [
+    "amarillo"
+   ],
+   "w": "Food tins and cans are metal packaging for the yellow container.",
+   "v": false
+  },
+  "window": {
+   "a": [
+    "puntolimpio"
+   ],
+   "w": "Window glass melts differently from bottle glass; take it to a punto limpio.",
+   "v": false
+  },
+  "drinkglass": {
+   "a": [
+    "resto",
+    "puntolimpio"
+   ],
+   "w": "Drinking glasses are not packaging and would spoil green-bin glass; wrap and put in grey.",
+   "v": true
+  },
+  "mirror": {
+   "a": [
+    "puntolimpio",
+    "resto"
+   ],
+   "w": "Mirrors have a metal coating and are not packaging; take them to a punto limpio.",
+   "v": true
+  },
+  "tissue": {
+   "a": [
+    "marron",
+    "resto"
+   ],
+   "w": "Many councils accept used paper napkins and tissues in brown; others ask for grey.",
+   "v": true
+  },
+  "diaper": {
+   "a": [
+    "resto"
+   ],
+   "w": "Diapers are not accepted in organic or packaging bins; they go in the grey container.",
+   "v": false
+  },
+  "pad": {
+   "a": [
+    "resto"
+   ],
+   "w": "Sanitary products go in the grey rest container.",
+   "v": false
+  },
+  "battery": {
+   "a": [
+    "puntolimpio"
+   ],
+   "w": "Batteries go to battery collection boxes in shops or to a punto limpio.",
+   "v": false
+  },
+  "bulb": {
+   "a": [
+    "puntolimpio"
+   ],
+   "w": "CFL bulbs contain mercury; return them to the shop or a punto limpio, never the green igloo.",
+   "v": false
+  },
+  "meds": {
+   "a": [
+    "sigre"
+   ],
+   "w": "Take medicines and their boxes to the SIGRE point at any pharmacy.",
+   "v": false
+  },
+  "paint": {
+   "a": [
+    "puntolimpio"
+   ],
+   "w": "Paint is hazardous household waste for the punto limpio.",
+   "v": false
+  },
+  "toy": {
+   "a": [
+    "resto",
+    "puntolimpio"
+   ],
+   "w": "The yellow bin takes packaging only; a plastic toy goes in grey, or big ones to a punto limpio.",
+   "v": false
+  }
+ },
+ "sources": [
+  "https://www.ecoembes.com/es/ciudadanos",
+  "https://reducereutilizarecicla.org/contenedores-de-reciclaje/contenedor-marron-organico/",
+  "https://reducereutilizarecicla.org/donde-tirar-cajas-de-pizza/",
+  "https://reducereutilizarecicla.org/donde-tirar-las-servilletas-de-papel/",
+  "https://maldita.es/clima/20221230/caja-pizza-donde-reciclar/",
+  "https://www.ecovidrio.es/",
+  "https://hablandoenvidrio.com/?p=14968",
+  "https://www.sigre.es/",
+  "https://www.miteco.gob.es/es/calidad-y-evaluacion-ambiental/temas/prevencion-y-gestion-residuos/flujos/biorresiduos/biorresiduos-como-se-recogen.html",
+  "https://www.boe.es/buscar/act.php?id=BOE-A-2022-5809"
+ ]
+}

@@ -1,0 +1,286 @@
+{
+ "name": "Finland",
+ "sub": "Waste Act separate collection of biowaste and packaging (cardboard, glass, metal, plastic) plus paper, with Rinki eco-points and HSY/Sortti rules.",
+ "bins": [
+  {
+   "id": "bio",
+   "label": "Biowaste",
+   "sub": "Food scraps, coffee, soft paper",
+   "colour": "#6B4F2A",
+   "divert": true
+  },
+  {
+   "id": "cardboard",
+   "label": "Cardboard packaging",
+   "sub": "Kartonki: cartons, boxes, egg trays",
+   "colour": "#2F6DB5",
+   "divert": true
+  },
+  {
+   "id": "paper",
+   "label": "Paper",
+   "sub": "Newspapers, magazines, letters",
+   "colour": "#3C8A50",
+   "divert": true
+  },
+  {
+   "id": "glass",
+   "label": "Glass packaging",
+   "sub": "Bottles and jars only",
+   "colour": "#1F8483",
+   "divert": true
+  },
+  {
+   "id": "metal",
+   "label": "Metal",
+   "sub": "Tins, lids, empty cans",
+   "colour": "#4A4F55",
+   "divert": true
+  },
+  {
+   "id": "plastic",
+   "label": "Plastic packaging",
+   "sub": "Bottles, bags, tubes, crisp packets",
+   "colour": "#E0B000",
+   "divert": true
+  },
+  {
+   "id": "general",
+   "label": "Mixed waste",
+   "sub": "Burned for energy",
+   "colour": "#6F7773",
+   "divert": false
+  },
+  {
+   "id": "hazardous",
+   "label": "Hazardous waste",
+   "sub": "Batteries, bulbs, paint, chemicals",
+   "colour": "#C8102E",
+   "divert": true
+  },
+  {
+   "id": "pharmacy",
+   "label": "Pharmacy",
+   "sub": "Medicines and needles",
+   "colour": "#2E8B57",
+   "divert": true
+  }
+ ],
+ "items": {
+  "banana": {
+   "a": [
+    "bio"
+   ],
+   "w": "Fruit peels are biowaste and become biogas and compost.",
+   "v": false
+  },
+  "eggshell": {
+   "a": [
+    "bio"
+   ],
+   "w": "Egg shells go in biowaste with other kitchen scraps.",
+   "v": false
+  },
+  "coffee": {
+   "a": [
+    "bio"
+   ],
+   "w": "Coffee grounds and paper filters both go in biowaste.",
+   "v": false
+  },
+  "bones": {
+   "a": [
+    "bio"
+   ],
+   "w": "Bones and fish bones are accepted in Finnish biowaste.",
+   "v": false
+  },
+  "shampoo": {
+   "a": [
+    "plastic"
+   ],
+   "w": "Empty plastic bottles go in plastic packaging collection.",
+   "v": false
+  },
+  "polybag": {
+   "a": [
+    "plastic"
+   ],
+   "w": "Plastic bags are plastic packaging; they also work as a bag for other plastic packaging.",
+   "v": false
+  },
+  "chips": {
+   "a": [
+    "plastic"
+   ],
+   "w": "Foil-lined crisp packets are mostly plastic, so they go in plastic packaging.",
+   "v": false
+  },
+  "tube": {
+   "a": [
+    "plastic"
+   ],
+   "w": "Squeeze out what you can; plastic tubes go in plastic packaging, metal ones in metal.",
+   "v": true
+  },
+  "carton": {
+   "a": [
+    "cardboard"
+   ],
+   "w": "Milk and juice cartons go in cardboard packaging (kartonki); rinse and flatten them.",
+   "v": false
+  },
+  "eggtray": {
+   "a": [
+    "cardboard",
+    "bio"
+   ],
+   "w": "Egg trays go with cardboard packaging; HSY also accepts them in biowaste.",
+   "v": true
+  },
+  "box": {
+   "a": [
+    "cardboard"
+   ],
+   "w": "Flatten cardboard boxes into cardboard packaging collection.",
+   "v": false
+  },
+  "pizza": {
+   "a": [
+    "cardboard",
+    "general"
+   ],
+   "w": "HSY accepts slightly greasy pizza boxes as cardboard; scrape off food, and very dirty ones go to mixed.",
+   "v": true
+  },
+  "newspaper": {
+   "a": [
+    "paper"
+   ],
+   "w": "Newspapers go in paper collection, separate from cardboard packaging.",
+   "v": false
+  },
+  "jar": {
+   "a": [
+    "glass"
+   ],
+   "w": "Empty glass jars go in glass packaging; put the metal lid in metal.",
+   "v": false
+  },
+  "wine": {
+   "a": [
+    "glass"
+   ],
+   "w": "Non-deposit wine bottles go in glass packaging; deposit bottles go back to the shop.",
+   "v": true
+  },
+  "perfume": {
+   "a": [
+    "glass"
+   ],
+   "w": "An empty perfume bottle counts as glass packaging; loose caps go elsewhere.",
+   "v": false
+  },
+  "tin": {
+   "a": [
+    "metal"
+   ],
+   "w": "Empty food tins go in metal collection.",
+   "v": false
+  },
+  "window": {
+   "a": [
+    "general"
+   ],
+   "w": "Wrap small window shards and put them in mixed waste; whole windows go to a Sortti station.",
+   "v": true
+  },
+  "drinkglass": {
+   "a": [
+    "general"
+   ],
+   "w": "Drinking glasses melt differently from bottles, so they go in mixed waste, not glass.",
+   "v": false
+  },
+  "mirror": {
+   "a": [
+    "general"
+   ],
+   "w": "Mirror glass is not packaging and its coating harms recycling, so it goes in mixed waste.",
+   "v": false
+  },
+  "tissue": {
+   "a": [
+    "bio"
+   ],
+   "w": "In HSY's area and many others, used tissues and paper towels go in biowaste.",
+   "v": true
+  },
+  "diaper": {
+   "a": [
+    "general"
+   ],
+   "w": "Nappies go in mixed waste, which is burned for energy.",
+   "v": false
+  },
+  "pad": {
+   "a": [
+    "general"
+   ],
+   "w": "Sanitary pads go in mixed waste.",
+   "v": false
+  },
+  "battery": {
+   "a": [
+    "hazardous"
+   ],
+   "w": "Batteries are hazardous; any shop selling them has a free collection box.",
+   "v": false
+  },
+  "bulb": {
+   "a": [
+    "hazardous"
+   ],
+   "w": "Energy-saving bulbs contain mercury; take them to a hazardous or electrical waste point.",
+   "v": false
+  },
+  "meds": {
+   "a": [
+    "pharmacy"
+   ],
+   "w": "Pharmacies take back household medicines and needles for free.",
+   "v": false
+  },
+  "paint": {
+   "a": [
+    "hazardous"
+   ],
+   "w": "A part-full paint can is hazardous; only an empty, dried can may go with metal.",
+   "v": false
+  },
+  "toy": {
+   "a": [
+    "general"
+   ],
+   "w": "Finnish plastic collection is for packaging only, so plastic toys go in mixed waste.",
+   "v": true
+  }
+ },
+ "sources": [
+  "https://www.hsy.fi/biojate/",
+  "https://www.hsy.fi/jatteet-ja-kierratys/lajittelu/kartonki-ja-pahvi/",
+  "https://www.hsy.fi/jatteet-ja-kierratys/jateopas-ja-lajitteluohjeet/jatteet/kartonkipakkaus-kartonkitolkki/",
+  "https://www.hsy.fi/jatteet-ja-kierratys/jateopas-ja-lajitteluohjeet/lajittelu/lasi/",
+  "https://www.hsy.fi/jatteet-ja-kierratys/jateopas-ja-lajitteluohjeet/jatteet/lasiesine/",
+  "https://www.hsy.fi/jatteet-ja-kierratys/jateopas-ja-lajitteluohjeet/jatteet/hajuvesipullo-tyhja/",
+  "https://www.hsy.fi/jatteet-ja-kierratys/jateopas-ja-lajitteluohjeet/jatteet/ikkuna/",
+  "https://www.hsy.fi/jatteet-ja-kierratys/jateopas/jatteet/peililasi/",
+  "https://www.hsy.fi/jatteet-ja-kierratys/lajittelu/vaarallinen-jate/",
+  "https://www.hsy.fi/jatteet-ja-kierratys/jateopas/jatteet/energiansaastolamppu/",
+  "https://www.hsy.fi/jatteet-ja-kierratys/jateopas-ja-lajitteluohjeet/jatteet/laakkeet/",
+  "https://www.kierratys.info/kartonkipakkaukset/",
+  "https://www.mustankorkea.fi/jateneuvonta/lajitteluohjeet-ja-jatteiden-kasittely/muovipakkaus/",
+  "https://yle.fi/a/3-9571263",
+  "https://m2kodit.fi/tunnetko-roskisten-varikoodit/"
+ ]
+}

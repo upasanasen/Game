@@ -1,0 +1,289 @@
+{
+ "name": "Denmark",
+ "sub": "The national harmonised 10-fraction system with shared pictograms used by every municipality.",
+ "bins": [
+  {
+   "id": "food",
+   "label": "Food waste",
+   "sub": "Peels, scraps, bones, coffee",
+   "colour": "#00A04B",
+   "divert": true
+  },
+  {
+   "id": "paper",
+   "label": "Paper",
+   "sub": "Newspapers, letters, magazines",
+   "colour": "#0082BE",
+   "divert": true
+  },
+  {
+   "id": "cardboard",
+   "label": "Cardboard",
+   "sub": "Boxes, egg trays, clean pap",
+   "colour": "#BEA064",
+   "divert": true
+  },
+  {
+   "id": "cartons",
+   "label": "Food & drink cartons",
+   "sub": "Milk, juice, tomato cartons",
+   "colour": "#BEA064",
+   "divert": true
+  },
+  {
+   "id": "glass",
+   "label": "Glass",
+   "sub": "Bottles, jars, drinking glasses",
+   "colour": "#21B685",
+   "divert": true
+  },
+  {
+   "id": "metal",
+   "label": "Metal",
+   "sub": "Tins, lids, foil, cans",
+   "colour": "#5A6E78",
+   "divert": true
+  },
+  {
+   "id": "plastic",
+   "label": "Plastic",
+   "sub": "Bottles, bags, tubs, film",
+   "colour": "#961E82",
+   "divert": true
+  },
+  {
+   "id": "hazardous",
+   "label": "Hazardous waste",
+   "sub": "Batteries, bulbs, paint, chemicals",
+   "colour": "#E10F1E",
+   "divert": true
+  },
+  {
+   "id": "general",
+   "label": "Residual waste",
+   "sub": "Burned for heat and power",
+   "colour": "#141414",
+   "divert": false
+  }
+ ],
+ "items": {
+  "banana": {
+   "a": [
+    "food"
+   ],
+   "w": "Food scraps go in the green food-waste bin and become biogas and fertiliser.",
+   "v": false
+  },
+  "eggshell": {
+   "a": [
+    "food"
+   ],
+   "w": "Egg shells are listed as food waste alongside other kitchen scraps.",
+   "v": false
+  },
+  "coffee": {
+   "a": [
+    "food"
+   ],
+   "w": "Coffee grounds and paper filters both go in food waste.",
+   "v": false
+  },
+  "bones": {
+   "a": [
+    "food"
+   ],
+   "w": "Bones and fish bones are accepted in Danish food waste.",
+   "v": false
+  },
+  "shampoo": {
+   "a": [
+    "plastic"
+   ],
+   "w": "Empty plastic bottles go in plastic; the cap can stay on.",
+   "v": false
+  },
+  "polybag": {
+   "a": [
+    "plastic"
+   ],
+   "w": "Soft plastic like carrier bags is collected with hard plastic in Denmark.",
+   "v": false
+  },
+  "chips": {
+   "a": [
+    "general",
+    "plastic"
+   ],
+   "w": "Most kommuner say residual because it is mixed foil; if it carries the plastic pictogram, plastic is fine.",
+   "v": true
+  },
+  "tube": {
+   "a": [
+    "plastic",
+    "general"
+   ],
+   "w": "Copenhagen says plastic or metal by material; some kommuner, like Aarhus, want tubes in residual.",
+   "v": true
+  },
+  "carton": {
+   "a": [
+    "cartons"
+   ],
+   "w": "Milk cartons have their own fraction; empty them, no rinsing needed.",
+   "v": true
+  },
+  "eggtray": {
+   "a": [
+    "cardboard",
+    "general"
+   ],
+   "w": "Clean egg trays usually go with cardboard, but a few kommuner send them to residual.",
+   "v": true
+  },
+  "box": {
+   "a": [
+    "cardboard"
+   ],
+   "w": "Flatten cardboard boxes and put them in the cardboard (pap) bin.",
+   "v": false
+  },
+  "pizza": {
+   "a": [
+    "general",
+    "cardboard"
+   ],
+   "w": "Food residue spoils the cardboard, so it is residual; Copenhagen now accepts empty pizza boxes as cardboard.",
+   "v": true
+  },
+  "newspaper": {
+   "a": [
+    "paper"
+   ],
+   "w": "Newspapers are the classic paper fraction and get recycled into new paper.",
+   "v": false
+  },
+  "jar": {
+   "a": [
+    "glass"
+   ],
+   "w": "Empty glass jars go in glass; put metal lids in metal.",
+   "v": false
+  },
+  "wine": {
+   "a": [
+    "glass"
+   ],
+   "w": "Wine bottles have no deposit in Denmark, so they go in the glass bin.",
+   "v": false
+  },
+  "perfume": {
+   "a": [
+    "glass"
+   ],
+   "w": "An empty perfume bottle can go in glass; remove the pump and cap if possible.",
+   "v": true
+  },
+  "tin": {
+   "a": [
+    "metal"
+   ],
+   "w": "Empty food tins go in metal; no need to wash them.",
+   "v": false
+  },
+  "window": {
+   "a": [
+    "general"
+   ],
+   "w": "Small shards of window glass can go in residual, wrapped; whole panes go to the genbrugsplads.",
+   "v": true
+  },
+  "drinkglass": {
+   "a": [
+    "glass"
+   ],
+   "w": "Unlike many countries, Danish glass collection takes drinking glasses and wrapped shards too.",
+   "v": true
+  },
+  "mirror": {
+   "a": [
+    "general"
+   ],
+   "w": "Mirror glass has a coating that spoils glass recycling, so small pieces go in residual.",
+   "v": true
+  },
+  "tissue": {
+   "a": [
+    "general"
+   ],
+   "w": "Used tissues are residual waste in Denmark, not food waste.",
+   "v": false
+  },
+  "diaper": {
+   "a": [
+    "general"
+   ],
+   "w": "Nappies are residual waste and are burned for district heating.",
+   "v": false
+  },
+  "pad": {
+   "a": [
+    "general"
+   ],
+   "w": "Hygiene products go in residual waste.",
+   "v": false
+  },
+  "battery": {
+   "a": [
+    "hazardous"
+   ],
+   "w": "Batteries are hazardous; use the kommune's battery bag or box, or a shop collection point.",
+   "v": false
+  },
+  "bulb": {
+   "a": [
+    "hazardous"
+   ],
+   "w": "Energy-saving bulbs contain mercury, so take them to hazardous waste or the genbrugsplads.",
+   "v": false
+  },
+  "meds": {
+   "a": [
+    "hazardous"
+   ],
+   "w": "Leftover medicine is hazardous waste; hand it in at any pharmacy (apotek).",
+   "v": false
+  },
+  "paint": {
+   "a": [
+    "hazardous"
+   ],
+   "w": "Paint with contents left is hazardous waste; take it to the genbrugsplads or miljøkasse.",
+   "v": false
+  },
+  "toy": {
+   "a": [
+    "plastic",
+    "general"
+   ],
+   "w": "Plastic toys without electronics can go in plastic; larger ones go to the genbrugsplads.",
+   "v": true
+  }
+ },
+ "sources": [
+  "https://mst.dk/borger/affald-og-forurening/sortering-af-affald/stroemlinet-affaldssortering",
+  "https://www.affaldspiktogrammer.dk/piktogrammer",
+  "https://vestfor.dk/bliv-klogere/viden/glas",
+  "https://vestfor.dk/bliv-klogere/viden/pap",
+  "https://vestfor.dk/bliv-klogere/viden/plast",
+  "https://vestfor.dk/bliv-klogere/viden/metal",
+  "https://vestfor.dk/bliv-klogere/viden/madaffald",
+  "https://vestfor.dk/bliv-klogere/viden/restaffald",
+  "https://www.kolding.dk/borger/affald-og-genbrug/saadan-sorterer-du-dit-affald/ind-i-affaldets-verden/mad-og-drikkekartoner",
+  "https://www.meresortering.dk/da-dk/de-ti-affaldstyper/mad-og-drikkekartoner",
+  "https://affald.kk.dk/affald/pizzabakke-alle-slags",
+  "https://www.kk.dk/nyheder/nu-kan-man-sortere-sin-pizzabakke-som-pap-i-koebenhavn",
+  "https://affald.kk.dk/affald/chipspose",
+  "https://affald.kk.dk/affald/tandpasta-emballage",
+  "https://www.kredslob.dk/sorteringsguiden/ikke-muligt/ikke-muligt/tandpastatuber"
+ ]
+}
